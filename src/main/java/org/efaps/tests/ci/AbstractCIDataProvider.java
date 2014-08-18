@@ -21,6 +21,11 @@
 
 package org.efaps.tests.ci;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.efaps.tests.ci.digester.CIForm;
+
 
 /**
  * TODO comment!
@@ -30,5 +35,5 @@ package org.efaps.tests.ci;
  */
 public abstract class AbstractCIDataProvider
 {
-
+    public static Set<CIForm> FORMS = new HashSet<>();
 }

@@ -29,6 +29,8 @@ import java.util.List;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.annotations.FromAnnotationsRuleModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
+import org.apache.commons.lang3.EnumUtils;
+import org.efaps.api.ui.UIType;
 import org.efaps.tests.ci.CIFormDataProvider;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIFormDefinition;
@@ -61,7 +63,10 @@ public class FormValidation
      */
     private static final Logger LOG = LoggerFactory.getLogger(FormValidation.class);
 
-    SoftAssert softAssert = new SoftAssert();
+    /**
+     * The soft assert instance.
+     */
+    private final SoftAssert softAssert = new SoftAssert();
 
 
     public void form()
@@ -95,7 +100,7 @@ public class FormValidation
                     final Object item = digester.parse(source);
                     stream.close();
                     if (item instanceof CIForm) {
-                        hasDataField((CIForm) item);
+                        fieldHasDataConfiguration((CIForm) item);
                     }
                 }
             }
@@ -112,9 +117,12 @@ public class FormValidation
         }
     }
 
-
+    /**
+     * Does the fields of the form have all a data definition.
+     * @param _ciForm form to be checked.
+     */
     @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
-    public void hasDataField(final CIForm _ciForm)
+    public void fieldHasDataConfiguration(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
@@ -143,10 +151,38 @@ public class FormValidation
             }
         }
     }
+
+    /**
+     * Does the fields of the form have all a data definition.
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
+    public void fieldWithUIType(final CIForm _ciForm)
+    {
+        for (final CIFormDefinition def : _ciForm.getDefinitions()) {
+            for (final CIFormField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    for (final CIProperty property : field.getProperties()) {
+                        if  ("UIType".equals(property.getName())) {
+                           final UIType value = EnumUtils.getEnum(UIType.class, property.getName());
+                           this.softAssert.assertNotNull(value,
+                                           String.format("\nForm: '%s', Field: '%s' invalid UIType Definition.",
+                                                           def.getName(), field.getName()));
+                        }
+                    }
+
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Print the resuslts.
+     */
     @AfterSuite
     public void printResults()
     {
         this.softAssert.assertAll();
     }
-
 }

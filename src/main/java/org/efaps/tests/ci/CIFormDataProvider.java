@@ -47,56 +47,69 @@ import org.xml.sax.SAXException;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ * @version $Id: CIFormDataProvider.java 13681 2014-08-18 20:55:45Z
+ *          jan@moxter.net $
  */
 
 public class CIFormDataProvider
 {
+
     private static final Logger LOG = LoggerFactory.getLogger(CIFormDataProvider.class);
 
+    /**
+     * @param _context context
+     * @return iterator with ciform
+     */
     @DataProvider(name = "CIForm")
     public static Iterator<Object[]> ciForms(final ITestContext _context)
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
-        final String baseFolderRel = _context.getCurrentXmlTest().getParameter("baseFolder");
-        final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
-        LOG.debug("basefolder: '{}'", baseFolder);
-        final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] {"xml"}, true);
+        if (AbstractCIDataProvider.FORMS.isEmpty()) {
 
-        for ( final File file :files) {
-            LOG.debug("file added: '{}'", file);
-            final DigesterLoader loader = DigesterLoader.newLoader(new FromAnnotationsRuleModule()
-            {
-                @Override
-                protected void configureRules()
+            final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
+            final String baseFolderRel = _context.getCurrentXmlTest().getParameter("baseFolder");
+            final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
+            LOG.debug("basefolder: '{}'", baseFolder);
+            final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] { "xml" }, true);
+
+            for (final File file : files) {
+                LOG.debug("file added: '{}'", file);
+                final DigesterLoader loader = DigesterLoader.newLoader(new FromAnnotationsRuleModule()
                 {
-                    bindRulesFrom(CIForm.class);
+
+                    @Override
+                    protected void configureRules()
+                    {
+                        bindRulesFrom(CIForm.class);
+                    }
+                });
+                try {
+                    final Digester digester = loader.newDigester();
+                    final URLConnection connection = file.toURI().toURL().openConnection();
+                    connection.setUseCaches(false);
+                    final InputStream stream = connection.getInputStream();
+                    final InputSource source = new InputSource(stream);
+                    final Object item = digester.parse(source);
+                    stream.close();
+                    if (item instanceof CIForm) {
+                        LOG.debug("item added: '{}'", item);
+                        AbstractCIDataProvider.FORMS.add((CIForm) item);
+                    }
+                } catch (final MalformedURLException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (final IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (final SAXException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
                 }
-            });
-            try {
-                final Digester digester = loader.newDigester();
-                final URLConnection connection = file.toURI().toURL().openConnection();
-                connection.setUseCaches(false);
-                final InputStream stream = connection.getInputStream();
-                final InputSource source = new InputSource(stream);
-                final Object item = digester.parse(source);
-                stream.close();
-                if (item instanceof CIForm) {
-                    LOG.debug("item added: '{}'", item);
-                    ret.add(new Object[]{ item });
-                }
-            } catch (final MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (final SAXException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
+        }
+        for (final CIForm ciform : AbstractCIDataProvider.FORMS) {
+            ret.add(new Object[] { ciform });
         }
         return ret.iterator();
     }
