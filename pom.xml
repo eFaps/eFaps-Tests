@@ -33,7 +33,7 @@
     </parent>
     <packaging>jar</packaging>
     <artifactId>efaps-tests</artifactId>
-    <name>eFaps API</name>
+    <name>eFaps Tests Suit</name>
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
