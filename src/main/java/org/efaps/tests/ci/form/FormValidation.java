@@ -95,7 +95,7 @@ public class FormValidation
                     final Object item = digester.parse(source);
                     stream.close();
                     if (item instanceof CIForm) {
-                        classNameOrUIProvider((CIForm) item);
+                        hasDataField((CIForm) item);
                     }
                 }
             }
@@ -114,7 +114,7 @@ public class FormValidation
 
 
     @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
-    public void classNameOrUIProvider(final CIForm _ciForm)
+    public void hasDataField(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
@@ -137,8 +137,8 @@ public class FormValidation
                         }
                     }
                     this.softAssert.assertEquals(has, true,
-                                    String.format("Form: '%s', Field: '%s' no DataField.\n", def.getName(),
-                                                    field.getName()));
+                                    String.format("\nForm: '%s', Field: '%s' has no DataField Definition.",
+                                                    def.getName(), field.getName()));
                 }
             }
         }
