@@ -40,7 +40,7 @@ public class CIFormField
 {
 
 
-    private final List<CIProperty> properties = new ArrayList<>();
+    private final List<CIFormProperty> properties = new ArrayList<>();
 
     @SetProperty(pattern = "ui-form/definition/field")
     private String name;
@@ -50,7 +50,7 @@ public class CIFormField
 
 
     @SetNext
-    public void addProperty(final CIProperty _property)
+    public void addProperty(final CIFormProperty _property)
     {
         this.properties.add(_property);
     }
@@ -61,7 +61,7 @@ public class CIFormField
      *
      * @return value of instance variable {@link #properties}
      */
-    public List<CIProperty> getProperties()
+    public List<CIFormProperty> getProperties()
     {
         return this.properties;
     }

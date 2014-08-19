@@ -36,7 +36,7 @@ import org.efaps.tests.ci.CIFormDataProvider;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIFormDefinition;
 import org.efaps.tests.ci.digester.CIFormField;
-import org.efaps.tests.ci.digester.CIProperty;
+import org.efaps.tests.ci.digester.CIFormProperty;
 import org.efaps.update.FileType;
 import org.efaps.update.Install.InstallFile;
 import org.efaps.update.util.InstallationException;
@@ -129,7 +129,7 @@ public class FormValidation
             for (final CIFormField field : def.getFields()) {
                 if (field.getCharacter() == null) {
                     boolean has = false;
-                    for (final CIProperty property : field.getProperties()) {
+                    for (final CIFormProperty property : field.getProperties()) {
                         switch (property.getName()) {
                             case "UIType":
                             case "UIProvider":
@@ -162,7 +162,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIProperty property : field.getProperties()) {
+                for (final CIFormProperty property : field.getProperties()) {
                     if ("UIType".equals(property.getName())) {
                         final UIType value = EnumUtils.getEnum(UIType.class, property.getValue());
                         this.softAssert.assertNotNull(value,
@@ -180,7 +180,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIProperty property : field.getProperties()) {
+                for (final CIFormProperty property : field.getProperties()) {
                     switch (property.getName()) {
                         case "ModeCreate":
                         case "ModeEdit":

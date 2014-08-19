@@ -31,7 +31,7 @@ import org.apache.commons.digester3.annotations.rules.SetProperty;
  * @version $Id$
  */
 @ObjectCreate(pattern = "ui-form/definition/field/property")
-public class CIProperty
+public class CIFormProperty
 {
 
     @SetProperty(pattern = "ui-form/definition/field/property")
