@@ -30,6 +30,7 @@ import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.annotations.FromAnnotationsRuleModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.lang3.EnumUtils;
+import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.api.ui.UIType;
 import org.efaps.tests.ci.CIFormDataProvider;
 import org.efaps.tests.ci.digester.CIForm;
@@ -161,21 +162,43 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                if (field.getCharacter() == null) {
-                    for (final CIProperty property : field.getProperties()) {
-                        if ("UIType".equals(property.getName())) {
-                            final UIType value = EnumUtils.getEnum(UIType.class, property.getValue());
-                            this.softAssert.assertNotNull(value,
-                                            String.format("\nForm: '%s', Field: '%s' invalid UIType Definition.",
-                                                            def.getName(), field.getName()));
-                        }
+                for (final CIProperty property : field.getProperties()) {
+                    if ("UIType".equals(property.getName())) {
+                        final UIType value = EnumUtils.getEnum(UIType.class, property.getValue());
+                        this.softAssert.assertNotNull(value,
+                                        String.format("\nForm: '%s', Field: '%s' invalid UIType Definition.",
+                                                        def.getName(), field.getName()));
                     }
-
                 }
             }
         }
     }
 
+
+    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
+    public void fieldValidateMode(final CIForm _ciForm)
+    {
+        for (final CIFormDefinition def : _ciForm.getDefinitions()) {
+            for (final CIFormField field : def.getFields()) {
+                for (final CIProperty property : field.getProperties()) {
+                    switch (property.getName()) {
+                        case "ModeCreate":
+                        case "ModeEdit":
+                        case "ModeView":
+                        case "ModePrint":
+                        case "ModeSearch":
+                            final Display value = EnumUtils.getEnum(Display.class, property.getValue());
+                            this.softAssert.assertNotNull(value,
+                                            String.format("\nForm: '%s', Field: '%s' invalid TargetMode Definition.",
+                                                            def.getName(), field.getName()));
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+    }
 
     /**
      * Print the resuslts.
