@@ -20,34 +20,18 @@
 
 package org.efaps.tests.ci.form;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLConnection;
-import java.util.List;
-
-import org.apache.commons.digester3.Digester;
-import org.apache.commons.digester3.annotations.FromAnnotationsRuleModule;
-import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.lang3.EnumUtils;
 import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.api.ui.UIType;
 import org.efaps.tests.ci.CIFormDataProvider;
+import org.efaps.tests.ci.CIListener;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIFormDefinition;
 import org.efaps.tests.ci.digester.CIFormField;
 import org.efaps.tests.ci.digester.CIFormProperty;
-import org.efaps.update.FileType;
-import org.efaps.update.Install.InstallFile;
-import org.efaps.update.util.InstallationException;
-import org.efaps.update.version.Application;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.testng.annotations.AfterSuite;
+import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
-import org.testng.asserts.SoftAssert;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 
 /**
@@ -56,73 +40,17 @@ import org.xml.sax.SAXException;
  * @author The eFaps Team
  * @version $Id$
  */
+@Listeners(CIListener.class)
 public class FormValidation
 {
-
-    /**
-     * Logging instance used to give logging information of this class.
-     */
-    private static final Logger LOG = LoggerFactory.getLogger(FormValidation.class);
-
-    /**
-     * The soft assert instance.
-     */
-    private final SoftAssert softAssert = new SoftAssert();
-
-
-    public void form()
-    {
-        //final File jar = new File(
-       //                 "//home/janmoxter/.m2/repository/org/efaps/apps/accounting/3.2.0-SNAPSHOT/accounting-3.2.0-SNAPSHOT.jar");
-        final File jar = new File(
-                        "//home/janmoxter/.m2/repository/org/efaps/apps/sales/3.2.0-SNAPSHOT/sales-3.2.0-SNAPSHOT.jar");
-
-        try {
-            final Application appl = Application.getApplicationFromJarFile(jar, null);
-
-            final List<InstallFile> files = appl.getInstall().getFiles();
-            for (final InstallFile file : files) {
-                LOG.info("reading file: '{}'", file);
-                if (FileType.XML.equals(file.getType())) {
-                    final DigesterLoader loader = DigesterLoader.newLoader(new FromAnnotationsRuleModule()
-                    {
-
-                        @Override
-                        protected void configureRules()
-                        {
-                            bindRulesFrom(CIForm.class);
-                        }
-                    });
-                    final Digester digester = loader.newDigester();
-                    final URLConnection connection = file.getUrl().openConnection();
-                    connection.setUseCaches(false);
-                    final InputStream stream = connection.getInputStream();
-                    final InputSource source = new InputSource(stream);
-                    final Object item = digester.parse(source);
-                    stream.close();
-                    if (item instanceof CIForm) {
-                        fieldHasDataConfiguration((CIForm) item);
-                    }
-                }
-            }
-
-        } catch (final InstallationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final SAXException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Does the fields of the form have all a data definition.
      * @param _ciForm form to be checked.
      */
-    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
+    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class,
+          description = "Field must have one of this Properties 'UIType', 'UIProvider', 'ClassNameUI', 'Attribute',"
+                          + "'Select'")
     public void fieldHasDataConfiguration(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
@@ -145,8 +73,8 @@ public class FormValidation
                             break;
                         }
                     }
-                    this.softAssert.assertEquals(has, true,
-                                    String.format("\nForm: '%s', Field: '%s' has no DataField Definition.",
+                    Assert.assertEquals(has, true,
+                                    String.format("Form: '%s', Field: '%s' has no DataField Definition.",
                                                     def.getName(), field.getName()));
                 }
             }
@@ -157,7 +85,8 @@ public class FormValidation
      * Does the fields of the form have all a data definition.
      * @param _ciForm form to be checked.
      */
-    @Test(dataProvider = "CIForm", dataProviderClass = CIFormDataProvider.class)
+    @Test(dataProvider = "CIForm", dataProviderClass = CIFormDataProvider.class,
+          description = "Property 'UIType' must have a value from ENUM  org.efaps.api.ui.UIType")
     public void fieldWithUIType(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
@@ -165,8 +94,8 @@ public class FormValidation
                 for (final CIFormProperty property : field.getProperties()) {
                     if ("UIType".equals(property.getName())) {
                         final UIType value = EnumUtils.getEnum(UIType.class, property.getValue());
-                        this.softAssert.assertNotNull(value,
-                                        String.format("\nForm: '%s', Field: '%s' invalid UIType Definition.",
+                        Assert.assertNotNull(value,
+                                        String.format("Form: '%s', Field: '%s' invalid UIType Definition.",
                                                         def.getName(), field.getName()));
                     }
                 }
@@ -174,8 +103,12 @@ public class FormValidation
         }
     }
 
-
-    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
+    /**
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class,
+          description = "Property 'ModeCreate', 'ModeEdit', 'ModeView', 'ModePrint', 'ModeSearch'"
+                                    + " must have a value from ENUM org.efaps.admin.ui.field.Field.Display")
     public void fieldValidateMode(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
@@ -188,8 +121,8 @@ public class FormValidation
                         case "ModePrint":
                         case "ModeSearch":
                             final Display value = EnumUtils.getEnum(Display.class, property.getValue());
-                            this.softAssert.assertNotNull(value,
-                                            String.format("\nForm: '%s', Field: '%s' invalid TargetMode Definition.",
+                            Assert.assertNotNull(value,
+                                            String.format("Form: '%s', Field: '%s' invalid Display Definition.",
                                                             def.getName(), field.getName()));
                             break;
                         default:
@@ -198,14 +131,5 @@ public class FormValidation
                 }
             }
         }
-    }
-
-    /**
-     * Print the resuslts.
-     */
-    @AfterSuite
-    public void printResults()
-    {
-        this.softAssert.assertAll();
     }
 }
