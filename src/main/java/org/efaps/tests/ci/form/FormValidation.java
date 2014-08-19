@@ -156,18 +156,18 @@ public class FormValidation
      * Does the fields of the form have all a data definition.
      * @param _ciForm form to be checked.
      */
-    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class)
+    @Test(dataProvider = "CIForm", dataProviderClass = CIFormDataProvider.class)
     public void fieldWithUIType(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
                 if (field.getCharacter() == null) {
                     for (final CIProperty property : field.getProperties()) {
-                        if  ("UIType".equals(property.getName())) {
-                           final UIType value = EnumUtils.getEnum(UIType.class, property.getName());
-                           this.softAssert.assertNotNull(value,
-                                           String.format("\nForm: '%s', Field: '%s' invalid UIType Definition.",
-                                                           def.getName(), field.getName()));
+                        if ("UIType".equals(property.getName())) {
+                            final UIType value = EnumUtils.getEnum(UIType.class, property.getValue());
+                            this.softAssert.assertNotNull(value,
+                                            String.format("\nForm: '%s', Field: '%s' invalid UIType Definition.",
+                                                            def.getName(), field.getName()));
                         }
                     }
 
