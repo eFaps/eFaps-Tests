@@ -132,4 +132,23 @@ public class FormValidation
             }
         }
     }
+
+    /**
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class,
+          description = "Properties must have a value")
+    public void propertyValidateHasValue(final CIForm _ciForm)
+    {
+        for (final CIFormDefinition def : _ciForm.getDefinitions()) {
+            for (final CIFormField field : def.getFields()) {
+                for (final CIFormProperty property : field.getProperties()) {
+                    final String msg = String.format("Form: '%s', Field: '%s', Property: '%s' missing Value.",
+                                    def.getName(), field.getName(), property.getName());
+                    Assert.assertNotEquals(property.getValue(), "", msg);
+                    Assert.assertNotNull(property.getValue(), msg);
+                }
+            }
+        }
+    }
 }
