@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.efaps.tests.ci.digester.CIForm;
+import org.efaps.tests.ci.digester.CITable;
 import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 
@@ -35,7 +35,7 @@ import org.testng.annotations.DataProvider;
  * @version $Id$
  */
 
-public class CIFormDataProvider
+public class CITableDataProvider
     extends AbstractCIDataProvider
 {
 
@@ -43,16 +43,16 @@ public class CIFormDataProvider
      * @param _context context
      * @return iterator with ciform
      */
-    @DataProvider(name = "CIForm")
-    public static Iterator<Object[]> ciForms(final ITestContext _context)
+    @DataProvider(name = "CITable")
+    public static Iterator<Object[]> ciTables(final ITestContext _context)
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.FORMS.isEmpty()) {
+        if (AbstractCIDataProvider.TABLES.isEmpty()) {
             loadCI(_context);
         }
-        for (final CIForm ciform : AbstractCIDataProvider.FORMS) {
-            ret.add(new Object[] { ciform });
+        for (final CITable ciTable : AbstractCIDataProvider.TABLES) {
+            ret.add(new Object[] { ciTable });
         }
         return ret.iterator();
     }
