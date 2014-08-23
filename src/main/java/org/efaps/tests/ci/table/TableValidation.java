@@ -41,7 +41,7 @@ import org.testng.annotations.Test;
 public class TableValidation
 {
     /**
-     * @param _ciForm form to be checked.
+     * @param _ciTable form to be checked.
      */
     @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
           description = "Properties must have a value")
@@ -60,7 +60,7 @@ public class TableValidation
     }
 
     /**
-     * @param _ciForm form to be checked.
+     * @param _ciTable form to be checked.
      */
     @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
           description = "Property 'ModeCreate', 'ModeEdit', 'ModeView', 'ModePrint', 'ModeSearch'"
