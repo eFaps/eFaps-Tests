@@ -35,6 +35,7 @@ import org.apache.commons.digester3.annotations.FromAnnotationsRuleModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CITable;
 import org.slf4j.Logger;
@@ -54,6 +55,7 @@ public abstract class AbstractCIDataProvider
 {
     public static Set<CIForm> FORMS = new HashSet<>();
     public static Set<CITable> TABLES = new HashSet<>();
+    public static Set<CICommand> COMMANDS = new HashSet<>();
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCIDataProvider.class);
 
@@ -78,6 +80,7 @@ public abstract class AbstractCIDataProvider
                 {
                     bindRulesFrom(CIForm.class);
                     bindRulesFrom(CITable.class);
+                    bindRulesFrom(CICommand.class);
                 }
             });
             try {
@@ -89,11 +92,14 @@ public abstract class AbstractCIDataProvider
                 final Object item = digester.parse(source);
                 stream.close();
                 if (item instanceof CIForm) {
-                    LOG.debug("item added: '{}'", item);
+                    LOG.debug("Form added: '{}'", item);
                     AbstractCIDataProvider.FORMS.add((CIForm) item);
                 } else if (item instanceof CITable) {
-                    LOG.debug("item added: '{}'", item);
+                    LOG.debug("Table added: '{}'", item);
                     AbstractCIDataProvider.TABLES.add((CITable) item);
+                } else if (item instanceof CICommand) {
+                    LOG.debug("Command added: '{}'", item);
+                    AbstractCIDataProvider.COMMANDS.add((CICommand) item);
                 }
             } catch (final MalformedURLException e) {
                 // TODO Auto-generated catch block
