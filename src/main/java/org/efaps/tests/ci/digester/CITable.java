@@ -28,6 +28,7 @@ import org.apache.commons.digester3.annotations.rules.BeanPropertySetter;
 import org.apache.commons.digester3.annotations.rules.ObjectCreate;
 import org.apache.commons.digester3.annotations.rules.SetNext;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.efaps.tests.ci.ICIItem;
 
 
 /**
@@ -38,6 +39,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  */
 @ObjectCreate(pattern = "ui-table")
 public class CITable
+    implements ICIItem
 {
     /**
      * The uuid of this Table.

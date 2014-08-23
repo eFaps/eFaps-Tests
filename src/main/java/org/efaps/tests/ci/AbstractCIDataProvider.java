@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.digester3.Digester;
 import org.apache.commons.digester3.annotations.FromAnnotationsRuleModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
@@ -41,6 +42,7 @@ import org.efaps.tests.ci.digester.CITable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
+import org.testng.annotations.BeforeSuite;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -59,10 +61,21 @@ public abstract class AbstractCIDataProvider
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCIDataProvider.class);
 
+    public static Set<ICIItem> getCIItems()
+    {
+        final Set<ICIItem> ret = new HashSet<>();
+        CollectionUtils.addAll(ret, FORMS);
+        CollectionUtils.addAll(ret, TABLES);
+        CollectionUtils.addAll(ret, COMMANDS);
+        return ret;
+    }
+
+
     /**
      * @param _context
      */
-    protected static void loadCI(final ITestContext _context)
+    @BeforeSuite
+    public static void loadCI(final ITestContext _context)
     {
         final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
         final String baseFolderRel = _context.getCurrentXmlTest().getParameter("baseFolder");
