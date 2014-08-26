@@ -210,7 +210,7 @@ public class FormValidation
             for (final CIFormField field : def.getFields()) {
                 for (final CIFormProperty property : field.getProperties()) {
                     if ("Label".equals(property.getName())) {
-                        Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.contains(property.getValue()),
+                        Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(property.getValue()),
                                         String.format("Form: '%s', Field: '%s' invalid Label: '%s'.",
                                                         def.getName(), field.getName(), property.getValue()));
                     }
