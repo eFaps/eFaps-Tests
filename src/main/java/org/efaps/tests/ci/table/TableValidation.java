@@ -102,8 +102,8 @@ public class TableValidation
                 for (final CITableProperty property : field.getProperties()) {
                     if ("Label".equals(property.getName())) {
                         Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.contains(property.getValue()),
-                                        String.format("Table: '%s', Field: '%s' invalid Label.",
-                                                        def.getName(), field.getName()));
+                                        String.format("Table: '%s', Field: '%s' invalid Label: '%s'.",
+                                                        def.getName(), field.getName(), property.getValue()));
                     }
                 }
             }
