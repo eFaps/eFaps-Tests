@@ -23,6 +23,7 @@ package org.efaps.tests.ci.table;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.efaps.admin.ui.field.Field.Display;
+import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.efaps.tests.ci.CITableDataProvider;
 import org.efaps.tests.ci.digester.CITable;
 import org.efaps.tests.ci.digester.CITableDefinition;
@@ -88,4 +89,25 @@ public class TableValidation
             }
         }
     }
+
+    /**
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CITable", dataProviderClass = CITableDataProvider.class,
+          description = "Property 'Label' must have a value in the DBProperties")
+    public void labelWithDBProperties(final CITable _ciTable)
+    {
+        for (final CITableDefinition def : _ciTable.getDefinitions()) {
+            for (final CITableField field : def.getFields()) {
+                for (final CITableProperty property : field.getProperties()) {
+                    if ("Label".equals(property.getName())) {
+                        Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.contains(property.getValue()),
+                                        String.format("Table: '%s', Field: '%s' invalid Label.",
+                                                        def.getName(), field.getName()));
+                    }
+                }
+            }
+        }
+    }
+
 }

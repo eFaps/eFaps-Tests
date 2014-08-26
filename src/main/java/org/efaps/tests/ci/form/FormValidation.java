@@ -25,6 +25,7 @@ import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.admin.ui.field.Filter.Base;
 import org.efaps.admin.ui.field.Filter.Type;
 import org.efaps.api.ui.UIType;
+import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.efaps.tests.ci.CIFormDataProvider;
 import org.efaps.tests.ci.CIListener;
 import org.efaps.tests.ci.digester.CIForm;
@@ -197,4 +198,25 @@ public class FormValidation
             }
         }
     }
+
+    /**
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CIForm", dataProviderClass = CIFormDataProvider.class,
+          description = "Property 'Label' must have a value in the DBProperties")
+    public void labelWithDBProperties(final CIForm _ciForm)
+    {
+        for (final CIFormDefinition def : _ciForm.getDefinitions()) {
+            for (final CIFormField field : def.getFields()) {
+                for (final CIFormProperty property : field.getProperties()) {
+                    if ("Label".equals(property.getName())) {
+                        Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.contains(property.getValue()),
+                                        String.format("Form: '%s', Field: '%s' invalid Label: '%s'.",
+                                                        def.getName(), field.getName(), property.getValue()));
+                    }
+                }
+            }
+        }
+    }
+
 }

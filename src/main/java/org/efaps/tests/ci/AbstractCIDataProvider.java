@@ -22,12 +22,14 @@
 package org.efaps.tests.ci;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URLConnection;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
@@ -58,6 +60,8 @@ public abstract class AbstractCIDataProvider
     public static Set<CIForm> FORMS = new HashSet<>();
     public static Set<CITable> TABLES = new HashSet<>();
     public static Set<CICommand> COMMANDS = new HashSet<>();
+
+    public static Properties DBPROPERTIES = new Properties();
 
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCIDataProvider.class);
 
@@ -126,5 +130,20 @@ public abstract class AbstractCIDataProvider
             }
         }
 
+        final Collection<File> propFiles = FileUtils.listFiles(new File(baseFolder), new String[] { "properties" },
+                        true);
+        for (final File file : propFiles) {
+            final Properties props = new Properties();
+            try {
+                props.load(new FileInputStream(file));
+                LOG.debug("properties loaded: '{}'", file);
+            } catch (final IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            if (!props.isEmpty()) {
+                DBPROPERTIES.putAll(props);
+            }
+        }
     }
 }
