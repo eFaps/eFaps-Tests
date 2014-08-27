@@ -141,9 +141,19 @@ public abstract class AbstractCIDataProvider
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-            if (!props.isEmpty()) {
-                DBPROPERTIES.putAll(props);
+            DBPROPERTIES.putAll(props);
+        }
+
+        try {
+            final InputStream ignStream = AbstractCIDataProvider.class.getResourceAsStream("/Ignore.properties");
+            if (ignStream != null) {
+                final Properties ignoreProps = new Properties();
+                ignoreProps.load(ignStream);
+                DBPROPERTIES.putAll(ignoreProps);
             }
+        } catch (final IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
     }
 }
