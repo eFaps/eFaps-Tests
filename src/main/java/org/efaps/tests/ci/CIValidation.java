@@ -67,8 +67,8 @@ public class CIValidation
         try {
             final SoftAssert softAssert = new SoftAssert();
             final String ciClass = _context.getCurrentXmlTest().getParameter("ciClass");
-            final Class<?> clazz = Class.forName(ciClass);
             if (ciClass != null) {
+                final Class<?> clazz = Class.forName(ciClass);
                 final Map<String, String> mapping = new HashMap<>();
                 for (final org.efaps.tests.ci.digester.CIType type : AbstractCIDataProvider.TYPES) {
                     mapping.put(type.getUuid(), type.getDefinitions().get(0).getName());
