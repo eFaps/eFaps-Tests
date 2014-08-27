@@ -41,6 +41,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CITable;
+import org.efaps.tests.ci.digester.CIType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
@@ -60,6 +61,7 @@ public abstract class AbstractCIDataProvider
     public static Set<CIForm> FORMS = new HashSet<>();
     public static Set<CITable> TABLES = new HashSet<>();
     public static Set<CICommand> COMMANDS = new HashSet<>();
+    public static Set<CIType> TYPES = new HashSet<>();
 
     public static Properties DBPROPERTIES = new Properties();
 
@@ -98,6 +100,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIForm.class);
                     bindRulesFrom(CITable.class);
                     bindRulesFrom(CICommand.class);
+                    bindRulesFrom(CIType.class);
                 }
             });
             try {
@@ -117,6 +120,9 @@ public abstract class AbstractCIDataProvider
                 } else if (item instanceof CICommand) {
                     LOG.debug("Command added: '{}'", item);
                     AbstractCIDataProvider.COMMANDS.add((CICommand) item);
+                } else if (item instanceof CIType) {
+                    LOG.debug("Type added: '{}'", item);
+                    AbstractCIDataProvider.TYPES.add((CIType) item);
                 }
             } catch (final MalformedURLException e) {
                 // TODO Auto-generated catch block
