@@ -21,6 +21,9 @@
 
 package org.efaps.tests.ci.table;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.EnumUtils;
 import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.tests.ci.AbstractCIDataProvider;
@@ -30,6 +33,7 @@ import org.efaps.tests.ci.digester.CITableDefinition;
 import org.efaps.tests.ci.digester.CITableField;
 import org.efaps.tests.ci.digester.CITableProperty;
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
 
@@ -95,15 +99,28 @@ public class TableValidation
      */
     @Test(dataProvider = "CITable", dataProviderClass = CITableDataProvider.class,
           description = "Property 'Label' must have a value in the DBProperties")
-    public void labelWithDBProperties(final CITable _ciTable)
+    public void labelWithDBProperties(final ITestContext _context,
+                                      final CITable _ciTable)
     {
+        final String regex4FieldLabelExclude = _context.getCurrentXmlTest().getParameter("regex4TypeLabelExclude");
+        Pattern pattern = null;
+        if (regex4FieldLabelExclude != null) {
+            pattern = Pattern.compile(regex4FieldLabelExclude);
+        }
         for (final CITableDefinition def : _ciTable.getDefinitions()) {
             for (final CITableField field : def.getFields()) {
                 for (final CITableProperty property : field.getProperties()) {
                     if ("Label".equals(property.getName())) {
-                        Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(property.getValue()),
+                        boolean exclude = false;
+                        if (pattern != null) {
+                            final Matcher matcher = pattern.matcher(property.getValue());
+                            exclude = matcher.find();
+                        }
+                        if (!exclude) {
+                            Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(property.getValue()),
                                         String.format("Table: '%s', Field: '%s' invalid Label: '%s'.",
                                                         def.getName(), field.getName(), property.getValue()));
+                        }
                     }
                 }
             }

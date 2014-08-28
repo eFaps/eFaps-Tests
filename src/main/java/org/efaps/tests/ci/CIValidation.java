@@ -27,6 +27,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.efaps.ci.CIAttribute;
 import org.efaps.ci.CIType;
@@ -59,6 +61,7 @@ public class CIValidation
     }
 
     /**
+     * @param _context context of the testrunner
      *
      */
     @Test(description = "Validate DBProperties for Types.")
@@ -67,7 +70,12 @@ public class CIValidation
         try {
             final SoftAssert softAssert = new SoftAssert();
             final String ciClass = _context.getCurrentXmlTest().getParameter("ciClass");
+            final String regex4TypeLabelExclude = _context.getCurrentXmlTest().getParameter("regex4TypeLabelExclude");
             if (ciClass != null) {
+                Pattern pattern = null;
+                if (regex4TypeLabelExclude != null) {
+                    pattern = Pattern.compile(regex4TypeLabelExclude);
+                }
                 final Class<?> clazz = Class.forName(ciClass);
                 final Map<String, String> mapping = new HashMap<>();
                 for (final org.efaps.tests.ci.digester.CIType type : AbstractCIDataProvider.TYPES) {
@@ -90,9 +98,16 @@ public class CIValidation
                                                 break;
                                             default:
                                                 final String key = typeName + "/" + name + ".Label";
-                                                softAssert.assertTrue(
+                                                boolean exclude = false;
+                                                if (pattern != null) {
+                                                    final Matcher matcher = pattern.matcher(key);
+                                                    exclude = matcher.find();
+                                                }
+                                                if (!exclude) {
+                                                    softAssert.assertTrue(
                                                                 AbstractCIDataProvider.DBPROPERTIES.containsKey(key),
                                                                 String.format("\nmissing Label: '%s'", key));
+                                                }
                                                 break;
                                         }
 

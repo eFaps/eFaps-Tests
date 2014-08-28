@@ -20,6 +20,9 @@
 
 package org.efaps.tests.ci.form;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.commons.lang3.EnumUtils;
 import org.efaps.admin.ui.field.Field.Display;
 import org.efaps.admin.ui.field.Filter.Base;
@@ -33,6 +36,7 @@ import org.efaps.tests.ci.digester.CIFormDefinition;
 import org.efaps.tests.ci.digester.CIFormField;
 import org.efaps.tests.ci.digester.CIFormProperty;
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
@@ -204,15 +208,28 @@ public class FormValidation
      */
     @Test(dataProvider = "CIForm", dataProviderClass = CIFormDataProvider.class,
           description = "Property 'Label' must have a value in the DBProperties")
-    public void labelWithDBProperties(final CIForm _ciForm)
+    public void labelWithDBProperties(final ITestContext _context,
+                                      final CIForm _ciForm)
     {
+        final String regex4FieldLabelExclude = _context.getCurrentXmlTest().getParameter("regex4TypeLabelExclude");
+        Pattern pattern = null;
+        if (regex4FieldLabelExclude != null) {
+            pattern = Pattern.compile(regex4FieldLabelExclude);
+        }
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
                 for (final CIFormProperty property : field.getProperties()) {
                     if ("Label".equals(property.getName())) {
-                        Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(property.getValue()),
+                        boolean exclude = false;
+                        if (pattern != null) {
+                            final Matcher matcher = pattern.matcher(property.getValue());
+                            exclude = matcher.find();
+                        }
+                        if (!exclude) {
+                            Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(property.getValue()),
                                         String.format("Form: '%s', Field: '%s' invalid Label: '%s'.",
                                                         def.getName(), field.getName(), property.getValue()));
+                        }
                     }
                 }
             }
