@@ -68,4 +68,14 @@ public class CIStatusGroupDefinition
     {
         this.name = _name;
     }
+
+    /**
+     * Getter method for the instance variable {@link #status}.
+     *
+     * @return value of instance variable {@link #status}
+     */
+    public List<CIStatus> getStatus()
+    {
+        return this.status;
+    }
 }
