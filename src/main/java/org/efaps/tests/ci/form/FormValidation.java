@@ -211,7 +211,7 @@ public class FormValidation
     public void labelWithDBProperties(final ITestContext _context,
                                       final CIForm _ciForm)
     {
-        final String regex4FieldLabelExclude = _context.getCurrentXmlTest().getParameter("regex4TypeLabelExclude");
+        final String regex4FieldLabelExclude = _context.getCurrentXmlTest().getParameter("regex4FieldLabelExclude");
         Pattern pattern = null;
         if (regex4FieldLabelExclude != null) {
             pattern = Pattern.compile(regex4FieldLabelExclude);
