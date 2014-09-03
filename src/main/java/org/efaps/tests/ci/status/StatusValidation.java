@@ -18,7 +18,6 @@
  * Last Changed By: $Author$
  */
 
-
 package org.efaps.tests.ci.status;
 
 import org.efaps.tests.ci.AbstractCIDataProvider;
@@ -26,34 +25,43 @@ import org.efaps.tests.ci.CIStatusDataProvider;
 import org.efaps.tests.ci.digester.CIStatus;
 import org.efaps.tests.ci.digester.CIStatusGroup;
 import org.efaps.tests.ci.digester.CIStatusGroupDefinition;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
-
+import org.testng.asserts.SoftAssert;
 
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
+ * @version $Id: StatusValidation.java 13877 2014-09-01 13:14:01Z jan@moxter.net
+ *          $
  */
 public class StatusValidation
 {
+
+
     /**
-     * @param _ciForm form to be checked.
+     * @param _context testcontext
+     * @param _ciStatusGroup    group to be checked
      */
     @Test(dataProvider = "CIStatus", dataProviderClass = CIStatusDataProvider.class,
-          description = "Status  must have a value for each key in the DBProperties")
+                    description = "Status  must have a value for each key in the DBProperties")
     public void statusWithDBProperties(final ITestContext _context,
                                        final CIStatusGroup _ciStatusGroup)
     {
+        final SoftAssert softAssert = new SoftAssert();
         for (final CIStatusGroupDefinition def : _ciStatusGroup.getDefinitions()) {
+            final String dbGroupKey = def.getName() + ".Label";
+            softAssert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(dbGroupKey),
+                            String.format("\nStatusGroup: '%s', missing Label: '%s'.",
+                                            def.getName(), dbGroupKey));
             for (final CIStatus status : def.getStatus()) {
                 final String dbKey = def.getName() + "/Key.Status." + status.getKey();
-                    Assert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(dbKey),
-                                        String.format("StatusGroup: '%s', Status: '%s' missing Label: '%s'.",
-                                                        def.getName(), status.getKey(), dbKey));
+                softAssert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(dbKey),
+                                String.format("\nStatusGroup: '%s', Status: '%s' missing Label: '%s'.",
+                                                def.getName(), status.getKey(), dbKey));
             }
         }
+        softAssert.assertAll();
     }
 }
