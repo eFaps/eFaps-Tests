@@ -57,6 +57,7 @@ public class CICommand
      *
      * @return value of instance variable {@link #uuid}
      */
+    @Override
     public String getUuid()
     {
         return this.uuid;

@@ -43,6 +43,12 @@ public class CICommandDefinition
     @BeanPropertySetter(pattern = "ui-command/definition/name")
     private String name;
 
+    @BeanPropertySetter(pattern = "ui-command/definition/target/form")
+    private String targetForm;
+
+    @BeanPropertySetter(pattern = "ui-command/definition/target/table")
+    private String targetTable;
+
     private final List<CICommandProperty> properties = new ArrayList<>();
 
 
@@ -80,5 +86,49 @@ public class CICommandDefinition
     public List<CICommandProperty> getProperties()
     {
         return this.properties;
+    }
+
+
+    /**
+     * Getter method for the instance variable {@link #targetForm}.
+     *
+     * @return value of instance variable {@link #targetForm}
+     */
+    public String getTargetForm()
+    {
+        return this.targetForm;
+    }
+
+
+    /**
+     * Setter method for instance variable {@link #targetForm}.
+     *
+     * @param _targetForm value for instance variable {@link #targetForm}
+     */
+    public void setTargetForm(final String _targetForm)
+    {
+        this.targetForm = _targetForm;
+    }
+
+
+    /**
+     * Getter method for the instance variable {@link #targetTable}.
+     *
+     * @return value of instance variable {@link #targetTable}
+     */
+    public String getTargetTable()
+    {
+        return this.targetTable;
+    }
+
+
+    /**
+     * Setter method for instance variable {@link #targetTable}.
+     *
+     * @param _targetTable value for instance variable {@link #targetTable}
+     */
+    public void setTargetTable(final String _targetTable)
+    {
+        this.targetTable = _targetTable;
     }
 }
