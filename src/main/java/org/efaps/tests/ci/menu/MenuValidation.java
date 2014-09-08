@@ -18,7 +18,7 @@
  * Last Changed By: $Author$
  */
 
-package org.efaps.tests.ci.command;
+package org.efaps.tests.ci.menu;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,11 +26,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.efaps.tests.ci.AbstractCIDataProvider;
-import org.efaps.tests.ci.CICommandDataProvider;
 import org.efaps.tests.ci.CIListener;
-import org.efaps.tests.ci.digester.CICommand;
-import org.efaps.tests.ci.digester.CICommandDefinition;
-import org.efaps.tests.ci.digester.CICommandProperty;
+import org.efaps.tests.ci.CIMenuDataProvider;
+import org.efaps.tests.ci.digester.CIMenu;
+import org.efaps.tests.ci.digester.CIMenuDefinition;
+import org.efaps.tests.ci.digester.CIMenuProperty;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Listeners;
@@ -44,20 +44,20 @@ import org.testng.asserts.SoftAssert;
  * @version $Id$
  */
 @Listeners(CIListener.class)
-public class CommandValidation
+public class MenuValidation
 {
 
     /**
-     * @param _ciCmd Command to be checked.
+     * @param _ciMenu Menu to be checked.
      */
-    @Test(dataProvider = "CICommand", dataProviderClass = CICommandDataProvider.class,
+    @Test(dataProvider = "CIMenu", dataProviderClass = CIMenuDataProvider.class,
                     description = "Properties must have a value")
-    public void propertyValidateHasValue(final CICommand _ciCmd)
+    public void propertyValidateHasValue(final CIMenu _ciMenu)
     {
-        for (final CICommandDefinition def : _ciCmd.getDefinitions()) {
+        for (final CIMenuDefinition def : _ciMenu.getDefinitions()) {
 
-            for (final CICommandProperty property : def.getProperties()) {
-                final String msg = String.format("Command: '%s', Property: '%s' missing Value.",
+            for (final CIMenuProperty property : def.getProperties()) {
+                final String msg = String.format("Menu: '%s', Property: '%s' missing Value.",
                                 def.getName(), property.getName());
                 Assert.assertNotEquals(property.getValue(), "", msg);
                 Assert.assertNotNull(property.getValue(), msg);
@@ -68,25 +68,25 @@ public class CommandValidation
 
    /**
     * @param _context testcontext
-    * @param _ciCmd command to be checked.
+    * @param _ciMenu command to be checked.
     */
-    @Test(dataProvider = "CICommand", dataProviderClass = CICommandDataProvider.class,
-                    description = "Commands must have a default values in the DBProperties")
+    @Test(dataProvider = "CIMenu", dataProviderClass = CIMenuDataProvider.class,
+                    description = "Menus must have a default values in the DBProperties")
     public void labelWithDBProperties(final ITestContext _context,
-                                      final CICommand _ciCmd)
+                                      final CIMenu _ciMenu)
     {
         final SoftAssert softassert = new SoftAssert();
-        final String regex4FieldLabelExclude = _context.getCurrentXmlTest().getParameter("regex4CommandLabelExclude");
+        final String regex4FieldLabelExclude = _context.getCurrentXmlTest().getParameter("regex4MenuLabelExclude");
         Pattern pattern = null;
         if (regex4FieldLabelExclude != null) {
             pattern = Pattern.compile(regex4FieldLabelExclude);
         }
-        for (final CICommandDefinition def : _ciCmd.getDefinitions()) {
+        for (final CIMenuDefinition def : _ciMenu.getDefinitions()) {
             final List<String> keys = new ArrayList<>();
             boolean needsTitle = def.getTargetForm() != null || def.getTargetTable() != null;
             boolean needsLabel = true;
             boolean needsQuestion = false;
-            for (final CICommandProperty property : def.getProperties()) {
+            for (final CIMenuProperty property : def.getProperties()) {
                 switch (property.getName()) {
                     case "TargetTitle":
                         keys.add(property.getValue());
@@ -120,7 +120,7 @@ public class CommandValidation
                 }
                 if (!exclude) {
                     softassert.assertTrue(AbstractCIDataProvider.DBPROPERTIES.containsKey(key),
-                                    String.format("Command: '%s', invalid Label: '%s'.",
+                                    String.format("Menu: '%s', invalid Label: '%s'.",
                                                     def.getName(), key));
                 }
             }

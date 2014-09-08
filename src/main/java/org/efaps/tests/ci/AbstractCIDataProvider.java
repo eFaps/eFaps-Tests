@@ -40,6 +40,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
+import org.efaps.tests.ci.digester.CIMenu;
 import org.efaps.tests.ci.digester.CIStatusGroup;
 import org.efaps.tests.ci.digester.CITable;
 import org.efaps.tests.ci.digester.CIType;
@@ -62,6 +63,7 @@ public abstract class AbstractCIDataProvider
     public static Set<CIForm> FORMS = new HashSet<>();
     public static Set<CITable> TABLES = new HashSet<>();
     public static Set<CICommand> COMMANDS = new HashSet<>();
+    public static Set<CIMenu> MENUS = new HashSet<>();
     public static Set<CIType> TYPES = new HashSet<>();
     public static Set<CIStatusGroup> STATUSGRPS = new HashSet<>();
 
@@ -102,6 +104,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIForm.class);
                     bindRulesFrom(CITable.class);
                     bindRulesFrom(CICommand.class);
+                    bindRulesFrom(CIMenu.class);
                     bindRulesFrom(CIType.class);
                     bindRulesFrom(CIStatusGroup.class);
                 }
@@ -129,6 +132,9 @@ public abstract class AbstractCIDataProvider
                 } else if (item instanceof CIStatusGroup) {
                     LOG.debug("CIStatusGroup added: '{}'", item);
                     AbstractCIDataProvider.STATUSGRPS.add((CIStatusGroup) item);
+                } else if (item instanceof CIMenu) {
+                    LOG.debug("CIMenu added: '{}'", item);
+                    AbstractCIDataProvider.MENUS.add((CIMenu) item);
                 }
             } catch (final MalformedURLException e) {
                 // TODO Auto-generated catch block
