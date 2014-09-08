@@ -22,6 +22,7 @@ package org.efaps.tests.ci.digester;
 
 import org.apache.commons.digester3.annotations.rules.BeanPropertySetter;
 import org.apache.commons.digester3.annotations.rules.ObjectCreate;
+import org.apache.commons.digester3.annotations.rules.SetProperty;
 
 /**
  * TODO comment!
@@ -38,6 +39,9 @@ public class CITypeDefinition
 
     @BeanPropertySetter(pattern = "datamodel-type/definition/name")
     private String name;
+
+    @SetProperty(pattern = "datamodel-type/definition/purpose", attributeName="abstract")
+    private boolean abstr;
 
     /**
      * Getter method for the instance variable {@link #name}.
@@ -57,5 +61,27 @@ public class CITypeDefinition
     public void setName(final String _name)
     {
         this.name = _name;
+    }
+
+
+    /**
+     * Getter method for the instance variable {@link #abstr}.
+     *
+     * @return value of instance variable {@link #abstr}
+     */
+    public boolean isAbstr()
+    {
+        return this.abstr;
+    }
+
+
+    /**
+     * Setter method for instance variable {@link #abstr}.
+     *
+     * @param _abstr value for instance variable {@link #abstr}
+     */
+    public void setAbstr(final boolean _abstr)
+    {
+        this.abstr = _abstr;
     }
 }
