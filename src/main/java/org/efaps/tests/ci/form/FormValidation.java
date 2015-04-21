@@ -25,8 +25,8 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.efaps.admin.ui.field.Field.Display;
-import org.efaps.admin.ui.field.Filter.Base;
-import org.efaps.admin.ui.field.Filter.Type;
+import org.efaps.api.ui.FilterBase;
+import org.efaps.api.ui.FilterType;
 import org.efaps.api.ui.UIType;
 import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.efaps.tests.ci.CIFormDataProvider;
@@ -170,8 +170,7 @@ public class FormValidation
             for (final CIFormField field : def.getFields()) {
                 for (final CIFormProperty property : field.getProperties()) {
                     if ("FilterType".equals(property.getName())) {
-                        final Type value = EnumUtils.getEnum(org.efaps.admin.ui.field.Filter.Type.class,
-                                        property.getValue());
+                        final FilterType value = EnumUtils.getEnum(FilterType.class, property.getValue());
                         Assert.assertNotNull(value,
                                         String.format("Form: '%s', Field: '%s' invalid FilterType.",
                                                         def.getName(), field.getName()));
@@ -192,8 +191,7 @@ public class FormValidation
             for (final CIFormField field : def.getFields()) {
                 for (final CIFormProperty property : field.getProperties()) {
                     if ("FilterBase".equals(property.getName())) {
-                        final Base value = EnumUtils.getEnum(org.efaps.admin.ui.field.Filter.Base.class,
-                                        property.getValue());
+                        final FilterBase value = EnumUtils.getEnum(FilterBase.class, property.getValue());
                         Assert.assertNotNull(value,
                                         String.format("Form: '%s', Field: '%s' invalid Base.",
                                                         def.getName(), field.getName()));
