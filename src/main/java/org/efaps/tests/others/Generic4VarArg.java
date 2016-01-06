@@ -36,8 +36,10 @@ import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
+import org.efaps.db.Insert;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
+import org.efaps.db.Update;
 import org.junit.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
@@ -61,9 +63,14 @@ public class Generic4VarArg
                         "addWhereSelectEqValue",
                         "addWhereAttrEqValue",
                         "addWhereAttrNotEqValue" })));
+        VARARGMAP.put(Insert.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+                        "add"})));
+        VARARGMAP.put(Update.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+                        "add"})));
 
         GENERICSMAP.put(PrintQuery.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
-                        "getSelect" })));
+                        "getSelect",
+                        "getAttribute"})));
     }
 
     /**
@@ -120,9 +127,9 @@ public class Generic4VarArg
                                         if (paraExpression != null) {
                                             final ITypeBinding paraTypeBinding = paraExpression.resolveTypeBinding();
                                             for (final Entry<String, Set<String>> genEntry : GENERICSMAP.entrySet()) {
-
-                                                if (genEntry.getKey().equals(paraTypeBinding.getBinaryName())
-                                                                && genEntry.getValue().contains(method.getName()
+                                                if (paraTypeBinding != null
+                                                            && genEntry.getKey().equals(paraTypeBinding.getBinaryName())
+                                                            && genEntry.getValue().contains(method.getName()
                                                                                 .getIdentifier())) {
 
                                                     Assert.assertFalse("Missing TypeArgument for VarArg in class "
