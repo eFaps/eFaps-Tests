@@ -98,10 +98,6 @@
             <version>${efaps.app.dependencies}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>dynamicreports-core</artifactId>
-                    <groupId>net.sourceforge.dynamicreports</groupId>
-                </exclusion>
-                <exclusion>
                     <artifactId>ecj</artifactId>
                     <groupId>org.eclipse.jdt.core.compiler</groupId>
                 </exclusion>

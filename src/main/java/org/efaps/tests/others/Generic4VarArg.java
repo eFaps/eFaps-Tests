@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2015 The eFaps Team
+ * Copyright 2003 - 2019 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
@@ -41,8 +39,6 @@ import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.junit.Assert;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
@@ -53,9 +49,6 @@ import org.testng.annotations.Test;
  */
 public class Generic4VarArg
 {
-
-    /** The Constant LOG. */
-    private static final Logger LOG = LoggerFactory.getLogger(Generic4VarArg.class);
 
     /** The varargmap containingn the vararg methods */
     private static Map<String, Set<String>> VARARGMAP = new HashMap<>();
@@ -79,31 +72,16 @@ public class Generic4VarArg
      * @param _context the context
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    @Test()
-    public void genericWithVarArgMethods(final ITestContext _context)
+    @Test(dataProvider = "JavaFiles", dataProviderClass = JavaFileProvider.class,
+                    description = "Check correct use of VarArg method invocation with generics.")
+    public void genericWithVarArgMethods(final ITestContext _context,
+                                         final File _file)
         throws IOException
     {
         final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
         final String baseFolderRel = _context.getCurrentXmlTest().getParameter("baseFolder");
         final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
-        LOG.debug("basefolder: '{}'", baseFolder);
-        final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] { "java" }, true);
-        for (final File file : files) {
-            check(baseFolder, file);
-        }
-    }
 
-    /**
-     * Check.
-     *
-     * @param _baseFolder the base folder
-     * @param _file the file
-     * @throws IOException Signals that an I/O exception has occurred.
-     */
-    private void check(final String _baseFolder,
-                       final File _file)
-        throws IOException
-    {
         final String str = readFileToString(_file);
 
         final ASTParser parser = ASTParser.newParser(AST.JLS8);
@@ -116,7 +94,7 @@ public class Generic4VarArg
         parser.setUnitName("any_name");
         // _context.getClass().getClassLoader().
         final String strClassPath = System.getProperty("java.class.path");
-        final String[] sources = { _baseFolder + "/ESJP/" };
+        final String[] sources = { baseFolder + "/ESJP/" };
         final String[] classpath = strClassPath.split(":");
 
         parser.setEnvironment(classpath, sources, new String[] { "UTF-8" }, true);
