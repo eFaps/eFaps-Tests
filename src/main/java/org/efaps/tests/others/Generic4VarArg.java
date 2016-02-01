@@ -40,7 +40,7 @@ import org.efaps.db.Insert;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
@@ -122,7 +122,7 @@ public class Generic4VarArg
                             if (typeBinding != null) {
                                 if (entry.getKey().equals(typeBinding.getBinaryName())) {
                                     if (_node.arguments().get(1) instanceof MethodInvocation) {
-                                        final MethodInvocation method = ((MethodInvocation) _node.arguments().get(1));
+                                        final MethodInvocation method = (MethodInvocation) _node.arguments().get(1);
                                         final Expression paraExpression = method.getExpression();
                                         if (paraExpression != null) {
                                             final ITypeBinding paraTypeBinding = paraExpression.resolveTypeBinding();
@@ -132,12 +132,12 @@ public class Generic4VarArg
                                                             && genEntry.getValue().contains(method.getName()
                                                                                 .getIdentifier())) {
 
-                                                    Assert.assertFalse("Missing TypeArgument for VarArg in class "
+                                                    Assert.assertFalse( method.typeArguments().isEmpty(),
+                                                                    "Missing TypeArgument for VarArg in class "
                                                                     +  _file.getName()
                                                                     + ", Line "
                                                                     + cu.getLineNumber(_node.getStartPosition())
-                                                                    + ": " + _node.toString(),
-                                                                    method.typeArguments().isEmpty());
+                                                                    + ": " + _node.toString());
                                                 }
                                             }
                                         }
