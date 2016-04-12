@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.EnumUtils;
 import org.efaps.admin.ui.field.Field.Display;
+import org.efaps.api.ui.UIType;
 import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.efaps.tests.ci.CITableDataProvider;
 import org.efaps.tests.ci.digester.CITable;
@@ -161,6 +162,28 @@ public class TableValidation
                     Assert.assertEquals(has, true,
                                     String.format("Table: '%s', Field: '%s' has no DataField Definition.",
                                                     def.getName(), field.getName()));
+                }
+            }
+        }
+    }
+
+    /**
+     * Does the field attribute has valid values.
+     * @param _ciTable form to be checked.
+     */
+    @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
+          description = "Field Property 'UIType' must have a value from org.efaps.api.ui.UIType enum.")
+    public void fieldPropertyUITypeValues(final CITable _ciTable)
+    {
+        for (final CITableDefinition def : _ciTable.getDefinitions()) {
+            for (final CITableField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    final CITableFieldProperty property = field.getProperty("UIType");
+                    if (property != null) {
+                        Assert.assertEquals(EnumUtils.isValidEnum(UIType.class, property.getValue()), true,
+                                    String.format("Table: '%s', Field: '%s', Property 'UIType' value '%s' invalid.",
+                                                    def.getName(), field.getName(), property.getValue()));
+                    }
                 }
             }
         }

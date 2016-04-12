@@ -31,6 +31,7 @@ import org.efaps.api.ui.UIType;
 import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.efaps.tests.ci.CIFormDataProvider;
 import org.efaps.tests.ci.CIListener;
+import org.efaps.tests.ci.CITableDataProvider;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIFormDefinition;
 import org.efaps.tests.ci.digester.CIFormField;
@@ -227,6 +228,28 @@ public class FormValidation
                                         String.format("Form: '%s', Field: '%s' invalid Label: '%s'.",
                                                         def.getName(), field.getName(), property.getValue()));
                         }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Does the field Property UIType has valid values.
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CIForm",  dataProviderClass = CITableDataProvider.class,
+          description = "Field Property 'UIType' must have a value from org.efaps.api.ui.UIType enum.")
+    public void fieldPropertyUITypeValues(final CIForm _ciForm)
+    {
+        for (final CIFormDefinition def : _ciForm.getDefinitions()) {
+            for (final CIFormField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    final CIFormProperty property = field.getProperty("UIType");
+                    if (property != null) {
+                        Assert.assertEquals(EnumUtils.isValidEnum(UIType.class, property.getValue()), true,
+                                    String.format("Table: '%s', Field: '%s', Property 'UIType' value '%s' invalid.",
+                                                    def.getName(), field.getName(), property.getValue()));
                     }
                 }
             }
