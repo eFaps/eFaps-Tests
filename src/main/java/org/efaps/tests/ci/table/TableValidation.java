@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
@@ -31,7 +28,7 @@ import org.efaps.tests.ci.CITableDataProvider;
 import org.efaps.tests.ci.digester.CITable;
 import org.efaps.tests.ci.digester.CITableDefinition;
 import org.efaps.tests.ci.digester.CITableField;
-import org.efaps.tests.ci.digester.CITableProperty;
+import org.efaps.tests.ci.digester.CITableFieldProperty;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
@@ -41,7 +38,6 @@ import org.testng.annotations.Test;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 public class TableValidation
 {
@@ -54,7 +50,7 @@ public class TableValidation
     {
         for (final CITableDefinition def : _ciTable.getDefinitions()) {
             for (final CITableField field : def.getFields()) {
-                for (final CITableProperty property : field.getProperties()) {
+                for (final CITableFieldProperty property : field.getProperties()) {
                     final String msg = String.format("Table: '%s', Field: '%s', Property: '%s' missing Value.",
                                     def.getName(), field.getName(), property.getName());
                     Assert.assertNotEquals(property.getValue(), "", msg);
@@ -74,7 +70,7 @@ public class TableValidation
     {
         for (final CITableDefinition def : _ciTable.getDefinitions()) {
             for (final CITableField field : def.getFields()) {
-                for (final CITableProperty property : field.getProperties()) {
+                for (final CITableFieldProperty property : field.getProperties()) {
                     switch (property.getName()) {
                         case "ModeCreate":
                         case "ModeEdit":
@@ -109,7 +105,7 @@ public class TableValidation
         }
         for (final CITableDefinition def : _ciTable.getDefinitions()) {
             for (final CITableField field : def.getFields()) {
-                for (final CITableProperty property : field.getProperties()) {
+                for (final CITableFieldProperty property : field.getProperties()) {
                     if ("Label".equals(property.getName())) {
                         boolean exclude = false;
                         if (pattern != null) {
@@ -127,4 +123,48 @@ public class TableValidation
         }
     }
 
+    /**
+     * Does the fields of the form have all a data definition.
+     * @param _ciForm form to be checked.
+     */
+    @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
+          description = "Field must have one of this Properties 'UIType', 'UIProvider', 'ClassNameUI', 'Attribute',"
+                          + "'Select'")
+    public void fieldHasDataConfiguration(final CITable _ciTable)
+    {
+        for (final CITableDefinition def : _ciTable.getDefinitions()) {
+            for (final CITableField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    boolean has = false;
+                    boolean hasRef = false;
+                    for (final CITableFieldProperty property : field.getProperties()) {
+                        switch (property.getName()) {
+                            case "UIType":
+                            case "UIProvider":
+                            case "ClassNameUI":
+                            case "Attribute":
+                            case "Select":
+                                has = true;
+                                break;
+                            case "HRef":
+                                hasRef = true;
+                                break;
+                            default:
+                                break;
+                        }
+                        if (has) {
+                            break;
+                        }
+                    }
+                    // if a href was set and no value it is a simple link and can be ignored
+                    if (!has && hasRef) {
+                        has = field.getTriggers().isEmpty();
+                    }
+                    Assert.assertEquals(has, true,
+                                    String.format("Table: '%s', Field: '%s' has no DataField Definition.",
+                                                    def.getName(), field.getName()));
+                }
+            }
+        }
+    }
 }

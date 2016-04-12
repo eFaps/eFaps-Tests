@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
@@ -33,40 +30,45 @@ import org.apache.commons.digester3.annotations.rules.SetProperty;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @ObjectCreate(pattern = "ui-table/definition/field")
 public class CITableField
 {
 
+    /** The properties. */
+    private final List<CITableFieldProperty> properties = new ArrayList<>();
 
-    private final List<CITableProperty> properties = new ArrayList<>();
+    /** The properties. */
+    private final List<CITableFieldTrigger> triggers = new ArrayList<>();
 
+    /** The name. */
     @SetProperty(pattern = "ui-table/definition/field")
     private String name;
 
+    /** The character. */
     @SetProperty(pattern = "ui-table/definition/field")
     private String character;
 
-
+    /**
+     * Adds the property.
+     *
+     * @param _property the property
+     */
     @SetNext
-    public void addProperty(final CITableProperty _property)
+    public void addProperty(final CITableFieldProperty _property)
     {
         this.properties.add(_property);
     }
-
 
     /**
      * Getter method for the instance variable {@link #properties}.
      *
      * @return value of instance variable {@link #properties}
      */
-    public List<CITableProperty> getProperties()
+    public List<CITableFieldProperty> getProperties()
     {
         return this.properties;
     }
-
-
 
     /**
      * Getter method for the instance variable {@link #name}.
@@ -78,8 +80,6 @@ public class CITableField
         return this.name;
     }
 
-
-
     /**
      * Setter method for instance variable {@link #name}.
      *
@@ -89,8 +89,6 @@ public class CITableField
     {
         this.name = _name;
     }
-
-
 
     /**
      * Getter method for the instance variable {@link #character}.
@@ -102,8 +100,6 @@ public class CITableField
         return this.character;
     }
 
-
-
     /**
      * Setter method for instance variable {@link #character}.
      *
@@ -112,5 +108,26 @@ public class CITableField
     public void setCharacter(final String _character)
     {
         this.character = _character;
+    }
+
+    /**
+     * Adds the trigger.
+     *
+     * @param _trigger the trigger
+     */
+    @SetNext
+    public void addTrigger(final CITableFieldTrigger _trigger)
+    {
+        this.triggers.add(_trigger);
+    }
+
+    /**
+     * Gets the properties.
+     *
+     * @return the properties
+     */
+    public List<CITableFieldTrigger> getTriggers()
+    {
+        return this.triggers;
     }
 }
