@@ -128,8 +128,7 @@ public class TableValidation
      * @param _ciForm form to be checked.
      */
     @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
-          description = "Field must have one of this Properties 'UIType', 'UIProvider', 'ClassNameUI', 'Attribute',"
-                          + "'Select'")
+          description = "Field must have one of this Properties 'UIType', 'UIProvider', 'Attribute', 'Select'")
     public void fieldHasDataConfiguration(final CITable _ciTable)
     {
         for (final CITableDefinition def : _ciTable.getDefinitions()) {
@@ -141,7 +140,6 @@ public class TableValidation
                         switch (property.getName()) {
                             case "UIType":
                             case "UIProvider":
-                            case "ClassNameUI":
                             case "Attribute":
                             case "Select":
                                 has = true;
