@@ -188,4 +188,29 @@ public class TableValidation
             }
         }
     }
+
+    /**
+     * Does the field attribute has valid values.
+     * @param _ciTable form to be checked.
+     */
+    @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
+          description = "Field Property 'Phrase' and 'MsgPhrase' must be accompanied by 'UIProvider'.")
+    public void fieldPropertyPhrase(final CITable _ciTable)
+    {
+        for (final CITableDefinition def : _ciTable.getDefinitions()) {
+            for (final CITableField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    final CITableFieldProperty phrase = field.getProperty("Phrase");
+                    final CITableFieldProperty msgPhrase = field.getProperty("MsgPhrase");
+                    if (phrase != null || msgPhrase != null) {
+                        final CITableFieldProperty uiProvider = field.getProperty("UIProvider");
+                        Assert.assertEquals(uiProvider != null, true,
+                                    String.format("Table: '%s', Field: '%s', Property 'Phrase' and 'MsgPhrase' "
+                                                    + "must be accompanied by 'UIProvider'.",
+                                                    def.getName(), field.getName()));
+                    }
+                }
+            }
+        }
+    }
 }
