@@ -42,7 +42,7 @@ public class CIFormField
 {
 
     /** The properties. */
-    private final List<CIFormProperty> properties = new ArrayList<>();
+    private final List<CIFormFieldProperty> properties = new ArrayList<>();
 
     /** The name. */
     @SetProperty(pattern = "ui-form/definition/field")
@@ -58,7 +58,7 @@ public class CIFormField
      * @param _property the property
      */
     @SetNext
-    public void addProperty(final CIFormProperty _property)
+    public void addProperty(final CIFormFieldProperty _property)
     {
         this.properties.add(_property);
     }
@@ -68,7 +68,7 @@ public class CIFormField
      *
      * @return value of instance variable {@link #properties}
      */
-    public List<CIFormProperty> getProperties()
+    public List<CIFormFieldProperty> getProperties()
     {
         return this.properties;
     }
@@ -121,14 +121,14 @@ public class CIFormField
      * @param _name the name
      * @return the property
      */
-    public CIFormProperty getProperty(final String _name)
+    public CIFormFieldProperty getProperty(final String _name)
     {
 
-        return IterableUtils.find(getProperties(), new Predicate<CIFormProperty>()
+        return IterableUtils.find(getProperties(), new Predicate<CIFormFieldProperty>()
         {
 
             @Override
-            public boolean evaluate(final CIFormProperty _object)
+            public boolean evaluate(final CIFormFieldProperty _object)
             {
                 return _object.getName().equals(_name);
             }

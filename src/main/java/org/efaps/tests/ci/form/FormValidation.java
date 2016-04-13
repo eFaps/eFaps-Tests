@@ -34,7 +34,7 @@ import org.efaps.tests.ci.CIListener;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIFormDefinition;
 import org.efaps.tests.ci.digester.CIFormField;
-import org.efaps.tests.ci.digester.CIFormProperty;
+import org.efaps.tests.ci.digester.CIFormFieldProperty;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Listeners;
@@ -64,7 +64,7 @@ public class FormValidation
             for (final CIFormField field : def.getFields()) {
                 if (field.getCharacter() == null) {
                     boolean has = false;
-                    for (final CIFormProperty property : field.getProperties()) {
+                    for (final CIFormFieldProperty property : field.getProperties()) {
                         switch (property.getName()) {
                             case "UIType":
                             case "UIProvider":
@@ -97,7 +97,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIFormProperty property : field.getProperties()) {
+                for (final CIFormFieldProperty property : field.getProperties()) {
                     if ("UIType".equals(property.getName())) {
                         final UIType value = EnumUtils.getEnum(UIType.class, property.getValue());
                         Assert.assertNotNull(value,
@@ -119,7 +119,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIFormProperty property : field.getProperties()) {
+                for (final CIFormFieldProperty property : field.getProperties()) {
                     switch (property.getName()) {
                         case "ModeCreate":
                         case "ModeEdit":
@@ -148,7 +148,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIFormProperty property : field.getProperties()) {
+                for (final CIFormFieldProperty property : field.getProperties()) {
                     final String msg = String.format("Form: '%s', Field: '%s', Property: '%s' missing Value.",
                                     def.getName(), field.getName(), property.getName());
                     Assert.assertNotEquals(property.getValue(), "", msg);
@@ -167,7 +167,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIFormProperty property : field.getProperties()) {
+                for (final CIFormFieldProperty property : field.getProperties()) {
                     if ("FilterType".equals(property.getName())) {
                         final FilterType value = EnumUtils.getEnum(FilterType.class, property.getValue());
                         Assert.assertNotNull(value,
@@ -188,7 +188,7 @@ public class FormValidation
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIFormProperty property : field.getProperties()) {
+                for (final CIFormFieldProperty property : field.getProperties()) {
                     if ("FilterBase".equals(property.getName())) {
                         final FilterBase value = EnumUtils.getEnum(FilterBase.class, property.getValue());
                         Assert.assertNotNull(value,
@@ -215,7 +215,7 @@ public class FormValidation
         }
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
-                for (final CIFormProperty property : field.getProperties()) {
+                for (final CIFormFieldProperty property : field.getProperties()) {
                     if ("Label".equals(property.getName())) {
                         boolean exclude = false;
                         if (pattern != null) {
@@ -244,7 +244,7 @@ public class FormValidation
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
                 if (field.getCharacter() == null) {
-                    final CIFormProperty property = field.getProperty("UIType");
+                    final CIFormFieldProperty property = field.getProperty("UIType");
                     if (property != null) {
                         Assert.assertEquals(EnumUtils.isValidEnum(UIType.class, property.getValue()), true,
                                     String.format("Table: '%s', Field: '%s', Property 'UIType' value '%s' invalid.",
@@ -266,14 +266,40 @@ public class FormValidation
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
             for (final CIFormField field : def.getFields()) {
                 if (field.getCharacter() == null) {
-                    final CIFormProperty phrase = field.getProperty("Phrase");
-                    final CIFormProperty msgPhrase = field.getProperty("MsgPhrase");
+                    final CIFormFieldProperty phrase = field.getProperty("Phrase");
+                    final CIFormFieldProperty msgPhrase = field.getProperty("MsgPhrase");
                     if (phrase != null || msgPhrase != null) {
-                        final CIFormProperty uiProvider = field.getProperty("UIProvider");
+                        final CIFormFieldProperty uiProvider = field.getProperty("UIProvider");
                         Assert.assertEquals(uiProvider != null, true,
-                                    String.format("Table: '%s', Field: '%s', Property 'Phrase' and 'MsgPhrase' "
+                                    String.format("Form: '%s', Field: '%s', Property 'Phrase' and 'MsgPhrase' "
                                                     + "must be accompanied by 'UIProvider'.",
                                                     def.getName(), field.getName()));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Does the field attribute has valid values.
+     * @param _ciForm Form to be checked.
+     */
+    @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class,
+          description = "Field Property 'Select' that do not return an attribute must be accompanied by 'UIProvider' "
+                          + "or 'UIType'.")
+    public void fieldPropertySelect(final CIForm _ciForm)
+    {
+        for (final CIFormDefinition def : _ciForm.getDefinitions()) {
+            for (final CIFormField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    final CIFormFieldProperty select = field.getProperty("Select");
+                    if (select != null && !select.getValue().endsWith("]")) {
+                        final CIFormFieldProperty uiProvider = field.getProperty("UIProvider");
+                        final CIFormFieldProperty uiType = field.getProperty("UIType");
+                        Assert.assertEquals(uiProvider != null || uiType != null, true,
+                                    String.format("Form: '%s', Field: '%s', Property 'Select' that do not "
+                                            + "return an attribute must be accompanied by 'UIProvider' or 'UIType'.",
+                                                def.getName(), field.getName()));
                     }
                 }
             }

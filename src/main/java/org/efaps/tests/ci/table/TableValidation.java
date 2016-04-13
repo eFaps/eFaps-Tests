@@ -213,4 +213,31 @@ public class TableValidation
             }
         }
     }
+
+    /**
+     * Does the field attribute has valid values.
+     * @param _ciTable Table to be checked.
+     */
+    @Test(dataProvider = "CITable",  dataProviderClass = CITableDataProvider.class,
+          description = "Field Property 'Select' that do not return an attribute must be accompanied by 'UIProvider' "
+                          + "or 'UIType'.")
+    public void fieldPropertySelect(final CITable _ciTable)
+    {
+        for (final CITableDefinition def : _ciTable.getDefinitions()) {
+            for (final CITableField field : def.getFields()) {
+                if (field.getCharacter() == null) {
+                    final CITableFieldProperty select = field.getProperty("Select");
+                    if (select != null && !select.getValue().endsWith("]")) {
+                        final CITableFieldProperty uiProvider = field.getProperty("UIProvider");
+                        final CITableFieldProperty uiType = field.getProperty("UIType");
+                        Assert.assertEquals(uiProvider != null || uiType != null, true,
+                                    String.format("Table: '%s', Field: '%s', Property 'Select' that do not "
+                                            + "return an attribute must be accompanied by 'UIProvider' or 'UIType'.",
+                                                def.getName(), field.getName()));
+                    }
+                }
+            }
+        }
+    }
+
 }
