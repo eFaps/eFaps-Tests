@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
@@ -27,25 +24,26 @@ import java.util.List;
 import org.apache.commons.digester3.annotations.rules.BeanPropertySetter;
 import org.apache.commons.digester3.annotations.rules.ObjectCreate;
 import org.apache.commons.digester3.annotations.rules.SetNext;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.efaps.tests.ci.ICIItem;
 
 
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @ObjectCreate(pattern = "ui-command")
 public class CICommand
-    implements ICIItem
+    extends AbstractCI
 {
     /**
      * The uuid of this command.
      */
     @BeanPropertySetter(pattern = "ui-command/uuid")
     private String uuid;
+
+    /** The file application. */
+    @BeanPropertySetter(pattern = "ui-command/file-application")
+    private String application;
 
     /**
      * The definitions belonging to this command.
@@ -81,7 +79,26 @@ public class CICommand
     {
         this.uuid = _uuid;
     }
+    /**
+     * Gets the file application.
+     *
+     * @return the file application
+     */
+    @Override
+    public String getApplication()
+    {
+        return this.application;
+    }
 
+    /**
+     * Sets the file application.
+     *
+     * @param _fileApplication the new file application
+     */
+    public void setApplication(final String _fileApplication)
+    {
+        this.application = _fileApplication;
+    }
     /**
      * Getter method for the instance variable {@link #definitions}.
      *
@@ -90,11 +107,5 @@ public class CICommand
     public List<CICommandDefinition> getDefinitions()
     {
         return this.definitions;
-    }
-
-    @Override
-    public String toString()
-    {
-        return new ToStringBuilder(this).append("uuid", getUuid()).toString();
     }
 }

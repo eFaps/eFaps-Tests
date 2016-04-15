@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 package org.efaps.tests.ci;
@@ -25,19 +22,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 public class CIValidation
 {
-
     /**
-     *
+     * Check that UUIDs are unique and valid
      */
     @Test(description = "Check that UUIDs are unique and valid")
     public void uniqueUUID()
@@ -49,4 +45,20 @@ public class CIValidation
             Assert.assertFalse(uuids.contains(uuid), String.format("Item: '%s' has duplicated UUID", item));
         }
     }
+
+    /**
+     * Check that UUIDs are unique and valid
+     */
+    @Test(description = "Check that file-application values are set correctly.")
+    public void fileApplication(final ITestContext _context)
+    {
+        final String application = _context.getCurrentXmlTest().getParameter("application");
+        if (application != null) {
+            for (final ICIItem item : AbstractCIDataProvider.getCIItems()) {
+                Assert.assertEquals(item.getApplication(), application,
+                                String.format("Item: '%s' has wrong Application", item));
+            }
+        }
+    }
+
 }

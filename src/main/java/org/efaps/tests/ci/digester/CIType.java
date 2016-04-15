@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,11 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
-
 
 package org.efaps.tests.ci.digester;
 
@@ -27,24 +23,26 @@ import java.util.List;
 import org.apache.commons.digester3.annotations.rules.BeanPropertySetter;
 import org.apache.commons.digester3.annotations.rules.ObjectCreate;
 import org.apache.commons.digester3.annotations.rules.SetNext;
-import org.efaps.tests.ci.ICIItem;
-
 
 /**
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 @ObjectCreate(pattern = "datamodel-type")
 public class CIType
-    implements ICIItem
+    extends AbstractCI
 {
+
     /**
      * The uuid of this form.
      */
     @BeanPropertySetter(pattern = "datamodel-type/uuid")
     private String uuid;
+
+    /** The file application. */
+    @BeanPropertySetter(pattern = "datamodel-type/file-application")
+    private String application;
 
     /**
      * The definitions belonging to this form.
@@ -66,6 +64,7 @@ public class CIType
     {
         this.uuid = _uuid;
     }
+
     /**
      * @param _definition definition to be added
      */
@@ -75,6 +74,26 @@ public class CIType
         this.definitions.add(_definition);
     }
 
+    /**
+     * Gets the file application.
+     *
+     * @return the file application
+     */
+    @Override
+    public String getApplication()
+    {
+        return this.application;
+    }
+
+    /**
+     * Sets the file application.
+     *
+     * @param _fileApplication the new file application
+     */
+    public void setApplication(final String _fileApplication)
+    {
+        this.application = _fileApplication;
+    }
 
     /**
      * Getter method for the instance variable {@link #definitions}.
@@ -85,6 +104,4 @@ public class CIType
     {
         return this.definitions;
     }
-
-
 }

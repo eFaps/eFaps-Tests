@@ -14,44 +14,48 @@
  * limitations under the License.
  *
  */
+package org.efaps.tests.ci.digester;
 
-
-package org.efaps.tests.ci;
-
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.efaps.tests.ci.ICIItem;
 
 /**
- * TODO comment!
+ * The Class AbstractCI.
  *
  * @author The eFaps Team
  */
-public interface ICIItem
+public abstract class AbstractCI
+    implements ICIItem
 {
 
-    /**
-     * Gets the uuid.
-     *
-     * @return the uuid
-     */
-    String getUuid();
+    /** The file. */
+    private String file;
 
     /**
-     * Gets the application.
-     *
-     * @return the application
-     */
-    String getApplication();
-
-    /**
-     * Gets the file .
+     * Gets the file.
      *
      * @return the file
      */
-    String getFile();
+    @Override
+    public String getFile()
+    {
+        return this.file;
+    }
 
     /**
      * Sets the file.
      *
      * @param _file the new file
      */
-    void setFile(final String _file);
+    public void setFile(final String _file)
+    {
+        this.file = _file;
+    }
+
+    @Override
+    public String toString()
+    {
+        return new ToStringBuilder(this)
+                        .append("file", getFile()).toString();
+    }
 }

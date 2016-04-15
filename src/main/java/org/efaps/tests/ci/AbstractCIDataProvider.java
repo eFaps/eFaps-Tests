@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2014 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,9 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * Revision:        $Rev$
- * Last Changed:    $Date$
- * Last Changed By: $Author$
  */
 
 
@@ -56,33 +53,55 @@ import org.xml.sax.SAXException;
  * TODO comment!
  *
  * @author The eFaps Team
- * @version $Id$
  */
 public abstract class AbstractCIDataProvider
 {
+
+    /** The forms. */
     public static Set<CIForm> FORMS = new HashSet<>();
+
+    /** The tables. */
     public static Set<CITable> TABLES = new HashSet<>();
+
+    /** The commands. */
     public static Set<CICommand> COMMANDS = new HashSet<>();
+
+    /** The menus. */
     public static Set<CIMenu> MENUS = new HashSet<>();
+
+    /** The types. */
     public static Set<CIType> TYPES = new HashSet<>();
+
+    /** The statusgrps. */
     public static Set<CIStatusGroup> STATUSGRPS = new HashSet<>();
 
+    /** The dbproperties. */
     public static Properties DBPROPERTIES = new Properties();
 
+    /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCIDataProvider.class);
 
+    /**
+     * Gets the CI items.
+     *
+     * @return the CI items
+     */
     public static Set<ICIItem> getCIItems()
     {
         final Set<ICIItem> ret = new HashSet<>();
         CollectionUtils.addAll(ret, FORMS);
         CollectionUtils.addAll(ret, TABLES);
         CollectionUtils.addAll(ret, COMMANDS);
+        CollectionUtils.addAll(ret, MENUS);
+        CollectionUtils.addAll(ret, TYPES);
+        CollectionUtils.addAll(ret, STATUSGRPS);
         return ret;
     }
 
-
     /**
-     * @param _context
+     * Load ci.
+     *
+     * @param _context the context
      */
     @BeforeSuite
     public static void loadCI(final ITestContext _context)
@@ -117,6 +136,10 @@ public abstract class AbstractCIDataProvider
                 final InputSource source = new InputSource(stream);
                 final Object item = digester.parse(source);
                 stream.close();
+                if (item instanceof ICIItem) {
+                    ((ICIItem) item).setFile(file.getPath());
+                }
+
                 if (item instanceof CIForm) {
                     LOG.debug("Form added: '{}'", item);
                     AbstractCIDataProvider.FORMS.add((CIForm) item);
@@ -137,14 +160,11 @@ public abstract class AbstractCIDataProvider
                     AbstractCIDataProvider.MENUS.add((CIMenu) item);
                 }
             } catch (final MalformedURLException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("MalformedURLException", e);
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("IOException", e);
             } catch (final SAXException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("SAXException", e);
             }
         }
 
@@ -156,8 +176,7 @@ public abstract class AbstractCIDataProvider
                 props.load(new FileInputStream(file));
                 LOG.debug("properties loaded: '{}'", file);
             } catch (final IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                LOG.error("IOException", e);
             }
             DBPROPERTIES.putAll(props);
         }
@@ -170,8 +189,7 @@ public abstract class AbstractCIDataProvider
                 DBPROPERTIES.putAll(ignoreProps);
             }
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOG.error("IOException", e);
         }
     }
 }
