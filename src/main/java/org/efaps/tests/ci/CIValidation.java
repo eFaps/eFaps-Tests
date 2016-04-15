@@ -22,7 +22,6 @@ import java.util.Set;
 import java.util.UUID;
 
 import org.testng.Assert;
-import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
 /**
@@ -47,18 +46,17 @@ public class CIValidation
     }
 
     /**
-     * Check that UUIDs are unique and valid
+     * Check that file-application values are set correctly.
+     *
+     * @param _application the application
+     * @param _item the item
      */
-    @Test(description = "Check that file-application values are set correctly.")
-    public void fileApplication(final ITestContext _context)
+    @Test(dataProvider = "CIItem",  dataProviderClass = CIItemDataProvider.class,
+                    description = "Check that file-application values are set correctly.")
+    public void fileApplication(final String _application,
+                                final ICIItem _item)
     {
-        final String application = _context.getCurrentXmlTest().getParameter("application");
-        if (application != null) {
-            for (final ICIItem item : AbstractCIDataProvider.getCIItems()) {
-                Assert.assertEquals(item.getApplication(), application,
-                                String.format("Item: '%s' has wrong Application", item));
-            }
-        }
+        Assert.assertEquals(_item.getApplication(), _application,
+                                String.format("Item: '%s' has wrong Application", _item));
     }
-
 }
