@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2019 The eFaps Team
+ * Copyright 2003 - 2016 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import org.eclipse.jdt.core.dom.Expression;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.efaps.db.Insert;
+import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
@@ -69,6 +70,9 @@ public class Generic4VarArg
                         "add"})));
 
         GENERICSMAP.put(PrintQuery.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+                        "getSelect",
+                        "getAttribute"})));
+        GENERICSMAP.put(MultiPrintQuery.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
                         "getSelect",
                         "getAttribute"})));
     }
