@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.efaps.tests.others;
+package org.efaps.tests.program;
 
 import java.io.BufferedReader;
 import java.io.File;

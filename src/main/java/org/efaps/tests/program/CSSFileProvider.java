@@ -14,7 +14,7 @@
  * limitations under the License.
  *
  */
-package org.efaps.tests.others;
+package org.efaps.tests.program;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -28,31 +28,32 @@ import org.testng.ITestContext;
 import org.testng.annotations.DataProvider;
 
 /**
- * The Class JavaFileProvider.
+ * The Class CSSFileProvider.
  *
  * @author The eFaps Team
  */
-public class JavaFileProvider
+public class CSSFileProvider
 {
 
     /**
-     * Ci status.
+     * CSS Files.
      *
      * @param _context the context
      * @return the iterator< object[]>
      */
-    @DataProvider(name = "JavaFiles")
-    public static Iterator<Object[]> ciStatus(final ITestContext _context)
+    @DataProvider(name = "CSSFiles")
+    public static Iterator<Object[]> cssFiles(final ITestContext _context)
     {
         final List<Object[]> ret = new ArrayList<>();
 
         final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
         final String baseFolderRel = _context.getCurrentXmlTest().getParameter("baseFolder");
         final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
-        final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] { "java" }, true);
+        final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] { "css" }, true);
         for (final File file : files) {
             ret.add(new Object[] { file });
         }
         return ret.iterator();
     }
+
 }

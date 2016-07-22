@@ -17,10 +17,6 @@
 
 package org.efaps.tests.ci;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
-
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -31,19 +27,7 @@ import org.testng.annotations.Test;
  */
 public class CIValidation
 {
-    /**
-     * Check that UUIDs are unique and valid
-     */
-    @Test(description = "Check that UUIDs are unique and valid")
-    public void uniqueUUID()
-    {
-        final Set<ICIItem> items = AbstractCIDataProvider.getCIItems();
-        final Set<UUID> uuids = new HashSet<>();
-        for (final ICIItem item : items) {
-            final UUID uuid = UUID.fromString(item.getUuid());
-            Assert.assertFalse(uuids.contains(uuid), String.format("Item: '%s' has duplicated UUID", item));
-        }
-    }
+
 
     /**
      * Check that file-application values are set correctly.
@@ -51,7 +35,7 @@ public class CIValidation
      * @param _application the application
      * @param _item the item
      */
-    @Test(dataProvider = "CIItem",  dataProviderClass = CIItemDataProvider.class,
+    @Test(dataProvider = "CIItem", dataProviderClass = CIItemDataProvider.class,
                     description = "Check that file-application values are set correctly.")
     public void fileApplication(final String _application,
                                 final ICIItem _item)
