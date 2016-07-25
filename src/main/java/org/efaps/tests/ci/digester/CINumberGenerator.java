@@ -46,9 +46,29 @@ public class CINumberGenerator
         return this.uuid;
     }
 
+    /**
+     * Setter method for instance variable {@link #uuid}.
+     *
+     * @param _uuid value for instance variable {@link #uuid}
+     */
+    public void setUuid(final String _uuid)
+    {
+        this.uuid = _uuid;
+    }
+
     @Override
     public String getApplication()
     {
         return this.application;
+    }
+
+    /**
+     * Sets the file application.
+     *
+     * @param _fileApplication the new file application
+     */
+    public void setApplication(final String _fileApplication)
+    {
+        this.application = _fileApplication;
     }
 }
