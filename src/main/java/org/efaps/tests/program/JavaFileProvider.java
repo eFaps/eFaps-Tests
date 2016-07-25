@@ -50,7 +50,9 @@ public class JavaFileProvider
         final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
         final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] { "java" }, true);
         for (final File file : files) {
-            ret.add(new Object[] { file });
+            if (!"package-info.java".equals(file.getName())) {
+                ret.add(new Object[] { file });
+            }
         }
         return ret.iterator();
     }
