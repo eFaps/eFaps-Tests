@@ -38,6 +38,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIMenu;
+import org.efaps.tests.ci.digester.CINumberGenerator;
 import org.efaps.tests.ci.digester.CIStatusGroup;
 import org.efaps.tests.ci.digester.CITable;
 import org.efaps.tests.ci.digester.CIType;
@@ -75,6 +76,9 @@ public abstract class AbstractCIDataProvider
     /** The statusgrps. */
     public static Set<CIStatusGroup> STATUSGRPS = new HashSet<>();
 
+    /** The statusgrps. */
+    public static Set<CINumberGenerator> NUMGENS = new HashSet<>();
+
     /** The dbproperties. */
     public static Properties DBPROPERTIES = new Properties();
 
@@ -95,6 +99,7 @@ public abstract class AbstractCIDataProvider
         CollectionUtils.addAll(ret, MENUS);
         CollectionUtils.addAll(ret, TYPES);
         CollectionUtils.addAll(ret, STATUSGRPS);
+        CollectionUtils.addAll(ret, NUMGENS);
         return ret;
     }
 
@@ -126,6 +131,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIMenu.class);
                     bindRulesFrom(CIType.class);
                     bindRulesFrom(CIStatusGroup.class);
+                    bindRulesFrom(CINumberGenerator.class);
                 }
             });
             try {
@@ -158,6 +164,9 @@ public abstract class AbstractCIDataProvider
                 } else if (item instanceof CIMenu) {
                     LOG.debug("CIMenu added: '{}'", item);
                     AbstractCIDataProvider.MENUS.add((CIMenu) item);
+                } else if (item instanceof CINumberGenerator) {
+                    LOG.debug("CINumberGenerator added: '{}'", item);
+                    AbstractCIDataProvider.NUMGENS.add((CINumberGenerator) item);
                 }
             } catch (final MalformedURLException e) {
                 LOG.error("MalformedURLException", e);
