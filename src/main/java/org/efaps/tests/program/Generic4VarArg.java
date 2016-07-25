@@ -60,19 +60,19 @@ public class Generic4VarArg
     private static Map<String, Set<String>> GENERICSMAP = new HashMap<>();
 
     static {
-        VARARGMAP.put(QueryBuilder.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+        VARARGMAP.put(QueryBuilder.class.getName(), new HashSet<>(Arrays.asList(new String[] {
                         "addWhereSelectEqValue",
                         "addWhereAttrEqValue",
                         "addWhereAttrNotEqValue" })));
-        VARARGMAP.put(Insert.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+        VARARGMAP.put(Insert.class.getName(), new HashSet<>(Arrays.asList(new String[] {
                         "add"})));
-        VARARGMAP.put(Update.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+        VARARGMAP.put(Update.class.getName(), new HashSet<>(Arrays.asList(new String[] {
                         "add"})));
 
-        GENERICSMAP.put(PrintQuery.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+        GENERICSMAP.put(PrintQuery.class.getName(), new HashSet<>(Arrays.asList(new String[] {
                         "getSelect",
                         "getAttribute"})));
-        GENERICSMAP.put(MultiPrintQuery.class.getName(), new HashSet<String>(Arrays.asList(new String[] {
+        GENERICSMAP.put(MultiPrintQuery.class.getName(), new HashSet<>(Arrays.asList(new String[] {
                         "getSelect",
                         "getAttribute"})));
     }
@@ -100,7 +100,9 @@ public class Generic4VarArg
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         parser.setResolveBindings(true);
         parser.setBindingsRecovery(true);
-        final Map<?,?> options = JavaCore.getOptions();
+        @SuppressWarnings("unchecked")
+        final Map<String, String> options = JavaCore.getOptions();
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
         parser.setCompilerOptions(options);
         parser.setUnitName("any_name");
         // _context.getClass().getClassLoader().

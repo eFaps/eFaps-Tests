@@ -45,7 +45,9 @@ public class ESJPValidation
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
         parser.setResolveBindings(true);
         parser.setBindingsRecovery(true);
-        final Map<?, ?> options = JavaCore.getOptions();
+        @SuppressWarnings("unchecked")
+        final Map<String, String> options = JavaCore.getOptions();
+        options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_8);
         parser.setCompilerOptions(options);
         parser.setUnitName("any_name");
         // _context.getClass().getClassLoader().
