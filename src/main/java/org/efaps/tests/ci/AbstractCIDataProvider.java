@@ -37,11 +37,13 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
+import org.efaps.tests.ci.digester.CIJasperImage;
 import org.efaps.tests.ci.digester.CIMenu;
 import org.efaps.tests.ci.digester.CINumberGenerator;
 import org.efaps.tests.ci.digester.CIStatusGroup;
 import org.efaps.tests.ci.digester.CITable;
 import org.efaps.tests.ci.digester.CIType;
+import org.efaps.tests.ci.digester.CIUIImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
@@ -79,6 +81,13 @@ public abstract class AbstractCIDataProvider
     /** The statusgrps. */
     public static Set<CINumberGenerator> NUMGENS = new HashSet<>();
 
+    /** The statusgrps. */
+    public static Set<CIUIImage> UIIMG = new HashSet<>();
+
+    /** The statusgrps. */
+    public static Set<CIJasperImage> JASPERIMG = new HashSet<>();
+
+
     /** The dbproperties. */
     public static Properties DBPROPERTIES = new Properties();
 
@@ -100,6 +109,8 @@ public abstract class AbstractCIDataProvider
         CollectionUtils.addAll(ret, TYPES);
         CollectionUtils.addAll(ret, STATUSGRPS);
         CollectionUtils.addAll(ret, NUMGENS);
+        CollectionUtils.addAll(ret, UIIMG);
+        CollectionUtils.addAll(ret, JASPERIMG);
         return ret;
     }
 
@@ -132,6 +143,8 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIType.class);
                     bindRulesFrom(CIStatusGroup.class);
                     bindRulesFrom(CINumberGenerator.class);
+                    bindRulesFrom(CIUIImage.class);
+                    bindRulesFrom(CIJasperImage.class);
                 }
             });
             try {
@@ -167,6 +180,12 @@ public abstract class AbstractCIDataProvider
                 } else if (item instanceof CINumberGenerator) {
                     LOG.debug("CINumberGenerator added: '{}'", item);
                     AbstractCIDataProvider.NUMGENS.add((CINumberGenerator) item);
+                } else if (item instanceof CIJasperImage) {
+                    LOG.debug("CINumberGenerator added: '{}'", item);
+                    AbstractCIDataProvider.JASPERIMG.add((CIJasperImage) item);
+                } else if (item instanceof CIUIImage) {
+                    LOG.debug("CINumberGenerator added: '{}'", item);
+                    AbstractCIDataProvider.UIIMG.add((CIUIImage) item);
                 }
             } catch (final MalformedURLException e) {
                 LOG.error("MalformedURLException", e);
