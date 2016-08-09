@@ -35,6 +35,7 @@ import org.apache.commons.digester3.annotations.FromAnnotationsRuleModule;
 import org.apache.commons.digester3.binder.DigesterLoader;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.efaps.tests.ci.digester.CIAccessSet;
 import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIJasperImage;
@@ -87,6 +88,9 @@ public abstract class AbstractCIDataProvider
     /** The statusgrps. */
     public static Set<CIJasperImage> JASPERIMG = new HashSet<>();
 
+    /** The statusgrps. */
+    public static Set<CIAccessSet> ACCESSSET = new HashSet<>();
+
 
     /** The dbproperties. */
     public static Properties DBPROPERTIES = new Properties();
@@ -111,6 +115,7 @@ public abstract class AbstractCIDataProvider
         CollectionUtils.addAll(ret, NUMGENS);
         CollectionUtils.addAll(ret, UIIMG);
         CollectionUtils.addAll(ret, JASPERIMG);
+        CollectionUtils.addAll(ret, ACCESSSET);
         return ret;
     }
 
@@ -145,6 +150,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CINumberGenerator.class);
                     bindRulesFrom(CIUIImage.class);
                     bindRulesFrom(CIJasperImage.class);
+                    bindRulesFrom(CIAccessSet.class);
                 }
             });
             try {
@@ -186,6 +192,9 @@ public abstract class AbstractCIDataProvider
                 } else if (item instanceof CIUIImage) {
                     LOG.debug("CINumberGenerator added: '{}'", item);
                     AbstractCIDataProvider.UIIMG.add((CIUIImage) item);
+                }  else if (item instanceof CIAccessSet) {
+                    LOG.debug("CIAccessSet added: '{}'", item);
+                    AbstractCIDataProvider.ACCESSSET.add((CIAccessSet) item);
                 }
             } catch (final MalformedURLException e) {
                 LOG.error("MalformedURLException", e);
