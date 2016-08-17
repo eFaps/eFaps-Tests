@@ -41,6 +41,8 @@ import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIJasperImage;
 import org.efaps.tests.ci.digester.CIMenu;
 import org.efaps.tests.ci.digester.CINumberGenerator;
+import org.efaps.tests.ci.digester.CISQLTable;
+import org.efaps.tests.ci.digester.CISearch;
 import org.efaps.tests.ci.digester.CIStatusGroup;
 import org.efaps.tests.ci.digester.CITable;
 import org.efaps.tests.ci.digester.CIType;
@@ -73,8 +75,14 @@ public abstract class AbstractCIDataProvider
     /** The menus. */
     public static Set<CIMenu> MENUS = new HashSet<>();
 
+    /** The commands. */
+    public static Set<CISearch> SEARCHS = new HashSet<>();
+
     /** The types. */
     public static Set<CIType> TYPES = new HashSet<>();
+
+    /** The types. */
+    public static Set<CISQLTable> SQLTABLES = new HashSet<>();
 
     /** The statusgrps. */
     public static Set<CIStatusGroup> STATUSGRPS = new HashSet<>();
@@ -90,7 +98,6 @@ public abstract class AbstractCIDataProvider
 
     /** The statusgrps. */
     public static Set<CIAccessSet> ACCESSSET = new HashSet<>();
-
 
     /** The dbproperties. */
     public static Properties DBPROPERTIES = new Properties();
@@ -109,6 +116,7 @@ public abstract class AbstractCIDataProvider
         CollectionUtils.addAll(ret, FORMS);
         CollectionUtils.addAll(ret, TABLES);
         CollectionUtils.addAll(ret, COMMANDS);
+        CollectionUtils.addAll(ret, SEARCHS);
         CollectionUtils.addAll(ret, MENUS);
         CollectionUtils.addAll(ret, TYPES);
         CollectionUtils.addAll(ret, STATUSGRPS);
@@ -116,6 +124,7 @@ public abstract class AbstractCIDataProvider
         CollectionUtils.addAll(ret, UIIMG);
         CollectionUtils.addAll(ret, JASPERIMG);
         CollectionUtils.addAll(ret, ACCESSSET);
+        CollectionUtils.addAll(ret, SQLTABLES);
         return ret;
     }
 
@@ -144,6 +153,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIForm.class);
                     bindRulesFrom(CITable.class);
                     bindRulesFrom(CICommand.class);
+                    bindRulesFrom(CISearch.class);
                     bindRulesFrom(CIMenu.class);
                     bindRulesFrom(CIType.class);
                     bindRulesFrom(CIStatusGroup.class);
@@ -151,6 +161,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIUIImage.class);
                     bindRulesFrom(CIJasperImage.class);
                     bindRulesFrom(CIAccessSet.class);
+                    bindRulesFrom(CISQLTable.class);
                 }
             });
             try {
@@ -192,9 +203,15 @@ public abstract class AbstractCIDataProvider
                 } else if (item instanceof CIUIImage) {
                     LOG.debug("CINumberGenerator added: '{}'", item);
                     AbstractCIDataProvider.UIIMG.add((CIUIImage) item);
-                }  else if (item instanceof CIAccessSet) {
+                } else if (item instanceof CIAccessSet) {
                     LOG.debug("CIAccessSet added: '{}'", item);
                     AbstractCIDataProvider.ACCESSSET.add((CIAccessSet) item);
+                } else if (item instanceof CISearch) {
+                    LOG.debug("CISearch added: '{}'", item);
+                    AbstractCIDataProvider.SEARCHS.add((CISearch) item);
+                } else if (item instanceof CISQLTable) {
+                    LOG.debug("CISearch added: '{}'", item);
+                    AbstractCIDataProvider.SQLTABLES.add((CISQLTable) item);
                 }
             } catch (final MalformedURLException e) {
                 LOG.error("MalformedURLException", e);
