@@ -40,6 +40,7 @@ import org.efaps.tests.ci.digester.CICommand;
 import org.efaps.tests.ci.digester.CIForm;
 import org.efaps.tests.ci.digester.CIJasperImage;
 import org.efaps.tests.ci.digester.CIMenu;
+import org.efaps.tests.ci.digester.CIMsgPhrase;
 import org.efaps.tests.ci.digester.CINumberGenerator;
 import org.efaps.tests.ci.digester.CISQLTable;
 import org.efaps.tests.ci.digester.CISearch;
@@ -102,6 +103,9 @@ public abstract class AbstractCIDataProvider
     /** The dbproperties. */
     public static Properties DBPROPERTIES = new Properties();
 
+    /** The statusgrps. */
+    public static Set<CIMsgPhrase> MSGPHRASES = new HashSet<>();
+
     /** The Constant LOG. */
     private static final Logger LOG = LoggerFactory.getLogger(AbstractCIDataProvider.class);
 
@@ -113,18 +117,19 @@ public abstract class AbstractCIDataProvider
     public static Set<ICIItem> getCIItems()
     {
         final Set<ICIItem> ret = new HashSet<>();
-        CollectionUtils.addAll(ret, FORMS);
-        CollectionUtils.addAll(ret, TABLES);
-        CollectionUtils.addAll(ret, COMMANDS);
-        CollectionUtils.addAll(ret, SEARCHS);
-        CollectionUtils.addAll(ret, MENUS);
-        CollectionUtils.addAll(ret, TYPES);
-        CollectionUtils.addAll(ret, STATUSGRPS);
-        CollectionUtils.addAll(ret, NUMGENS);
-        CollectionUtils.addAll(ret, UIIMG);
-        CollectionUtils.addAll(ret, JASPERIMG);
-        CollectionUtils.addAll(ret, ACCESSSET);
-        CollectionUtils.addAll(ret, SQLTABLES);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.FORMS);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.TABLES);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.COMMANDS);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.SEARCHS);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.MENUS);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.TYPES);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.STATUSGRPS);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.NUMGENS);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.UIIMG);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.JASPERIMG);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.ACCESSSET);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.SQLTABLES);
+        CollectionUtils.addAll(ret, AbstractCIDataProvider.MSGPHRASES);
         return ret;
     }
 
@@ -139,11 +144,11 @@ public abstract class AbstractCIDataProvider
         final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
         final String baseFolderRel = _context.getCurrentXmlTest().getParameter("baseFolder");
         final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
-        LOG.debug("basefolder: '{}'", baseFolder);
+        AbstractCIDataProvider.LOG.debug("basefolder: '{}'", baseFolder);
         final Collection<File> files = FileUtils.listFiles(new File(baseFolder), new String[] { "xml" }, true);
 
         for (final File file : files) {
-            LOG.debug("file added: '{}'", file);
+            AbstractCIDataProvider.LOG.debug("file added: '{}'", file);
             final DigesterLoader loader = DigesterLoader.newLoader(new FromAnnotationsRuleModule()
             {
 
@@ -162,6 +167,7 @@ public abstract class AbstractCIDataProvider
                     bindRulesFrom(CIJasperImage.class);
                     bindRulesFrom(CIAccessSet.class);
                     bindRulesFrom(CISQLTable.class);
+                    bindRulesFrom(CIMsgPhrase.class);
                 }
             });
             try {
@@ -177,48 +183,51 @@ public abstract class AbstractCIDataProvider
                 }
 
                 if (item instanceof CIForm) {
-                    LOG.debug("Form added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("Form added: '{}'", item);
                     AbstractCIDataProvider.FORMS.add((CIForm) item);
                 } else if (item instanceof CITable) {
-                    LOG.debug("Table added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("Table added: '{}'", item);
                     AbstractCIDataProvider.TABLES.add((CITable) item);
                 } else if (item instanceof CICommand) {
-                    LOG.debug("Command added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("Command added: '{}'", item);
                     AbstractCIDataProvider.COMMANDS.add((CICommand) item);
                 } else if (item instanceof CIType) {
-                    LOG.debug("Type added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("Type added: '{}'", item);
                     AbstractCIDataProvider.TYPES.add((CIType) item);
                 } else if (item instanceof CIStatusGroup) {
-                    LOG.debug("CIStatusGroup added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CIStatusGroup added: '{}'", item);
                     AbstractCIDataProvider.STATUSGRPS.add((CIStatusGroup) item);
                 } else if (item instanceof CIMenu) {
-                    LOG.debug("CIMenu added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CIMenu added: '{}'", item);
                     AbstractCIDataProvider.MENUS.add((CIMenu) item);
                 } else if (item instanceof CINumberGenerator) {
-                    LOG.debug("CINumberGenerator added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CINumberGenerator added: '{}'", item);
                     AbstractCIDataProvider.NUMGENS.add((CINumberGenerator) item);
                 } else if (item instanceof CIJasperImage) {
-                    LOG.debug("CINumberGenerator added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CINumberGenerator added: '{}'", item);
                     AbstractCIDataProvider.JASPERIMG.add((CIJasperImage) item);
                 } else if (item instanceof CIUIImage) {
-                    LOG.debug("CINumberGenerator added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CINumberGenerator added: '{}'", item);
                     AbstractCIDataProvider.UIIMG.add((CIUIImage) item);
                 } else if (item instanceof CIAccessSet) {
-                    LOG.debug("CIAccessSet added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CIAccessSet added: '{}'", item);
                     AbstractCIDataProvider.ACCESSSET.add((CIAccessSet) item);
                 } else if (item instanceof CISearch) {
-                    LOG.debug("CISearch added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CISearch added: '{}'", item);
                     AbstractCIDataProvider.SEARCHS.add((CISearch) item);
                 } else if (item instanceof CISQLTable) {
-                    LOG.debug("CISearch added: '{}'", item);
+                    AbstractCIDataProvider.LOG.debug("CISearch added: '{}'", item);
                     AbstractCIDataProvider.SQLTABLES.add((CISQLTable) item);
+                } else if (item instanceof CIMsgPhrase) {
+                    AbstractCIDataProvider.LOG.debug("CIMsgPhrase added: '{}'", item);
+                    AbstractCIDataProvider.MSGPHRASES.add((CIMsgPhrase) item);
                 }
             } catch (final MalformedURLException e) {
-                LOG.error("MalformedURLException", e);
+                AbstractCIDataProvider.LOG.error("MalformedURLException", e);
             } catch (final IOException e) {
-                LOG.error("IOException", e);
+                AbstractCIDataProvider.LOG.error("IOException", e);
             } catch (final SAXException e) {
-                LOG.error("SAXException", e);
+                AbstractCIDataProvider.LOG.error("SAXException", e);
             }
         }
 
@@ -228,11 +237,11 @@ public abstract class AbstractCIDataProvider
             final Properties props = new Properties();
             try {
                 props.load(new FileInputStream(file));
-                LOG.debug("properties loaded: '{}'", file);
+                AbstractCIDataProvider.LOG.debug("properties loaded: '{}'", file);
             } catch (final IOException e) {
-                LOG.error("IOException", e);
+                AbstractCIDataProvider.LOG.error("IOException", e);
             }
-            DBPROPERTIES.putAll(props);
+            AbstractCIDataProvider.DBPROPERTIES.putAll(props);
         }
 
         try {
@@ -240,10 +249,10 @@ public abstract class AbstractCIDataProvider
             if (ignStream != null) {
                 final Properties ignoreProps = new Properties();
                 ignoreProps.load(ignStream);
-                DBPROPERTIES.putAll(ignoreProps);
+                AbstractCIDataProvider.DBPROPERTIES.putAll(ignoreProps);
             }
         } catch (final IOException e) {
-            LOG.error("IOException", e);
+            AbstractCIDataProvider.LOG.error("IOException", e);
         }
     }
 }
