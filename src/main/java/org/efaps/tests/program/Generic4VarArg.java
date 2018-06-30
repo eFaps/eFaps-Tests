@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2016 The eFaps Team
+ * Copyright 2003 - 2018 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,24 +24,14 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import org.apache.commons.io.FilenameUtils;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import org.eclipse.jdt.core.dom.Expression;
-import org.eclipse.jdt.core.dom.ITypeBinding;
-import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.efaps.db.Insert;
 import org.efaps.db.MultiPrintQuery;
 import org.efaps.db.PrintQuery;
 import org.efaps.db.QueryBuilder;
 import org.efaps.db.Update;
-import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
@@ -94,7 +84,7 @@ public class Generic4VarArg
         final String baseFolder = FilenameUtils.concat(xmlFile.getPath(), baseFolderRel);
 
         final String str = readFileToString(_file);
-
+/*
         final ASTParser parser = ASTParser.newParser(AST.JLS8);
 
         parser.setKind(ASTParser.K_COMPILATION_UNIT);
@@ -156,6 +146,7 @@ public class Generic4VarArg
                 return super.visit(_node);
             }
         });
+        */
     }
 
     /**

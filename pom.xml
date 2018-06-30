@@ -96,22 +96,11 @@
             <groupId>org.efaps</groupId>
             <artifactId>efaps-kernel</artifactId>
             <version>${efaps.app.dependencies}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>ecj</artifactId>
-                    <groupId>org.eclipse.jdt.core.compiler</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.efaps</groupId>
             <artifactId>efaps-api</artifactId>
             <version>${efaps.app.dependencies}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jdt</groupId>
-            <artifactId>org.eclipse.jdt.core</artifactId>
-            <version>3.13.50</version>
         </dependency>
         <dependency>
             <groupId>org.testng</groupId>
