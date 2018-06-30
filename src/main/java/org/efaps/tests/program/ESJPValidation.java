@@ -3,6 +3,7 @@ package org.efaps.tests.program;
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.File;
@@ -40,6 +41,13 @@ public class ESJPValidation
             @Override
             public void visit(final ClassOrInterfaceDeclaration _n, final Void _arg)
             {
+                _n.getAnnotations().forEach(an -> {
+                    annotations.add(an.getNameAsString());
+                    annotations.add(an.toString());
+                });
+            }
+            @Override
+            public void visit(final EnumDeclaration _n, final Void _arg) {
                 _n.getAnnotations().forEach(an -> {
                     annotations.add(an.getNameAsString());
                     annotations.add(an.toString());
