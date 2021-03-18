@@ -51,7 +51,6 @@ import org.efaps.tests.ci.digester.CIUIImage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
-import org.testng.annotations.BeforeSuite;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -138,7 +137,6 @@ public abstract class AbstractCIDataProvider
      *
      * @param _context the context
      */
-    @BeforeSuite
     public static void loadCI(final ITestContext _context)
     {
         final File xmlFile = new File(_context.getCurrentXmlTest().getSuite().getFileName());
