@@ -1,11 +1,5 @@
 package org.efaps.tests.program;
 
-import com.github.javaparser.JavaParser;
-import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.EnumDeclaration;
-import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.HashSet;
@@ -16,6 +10,12 @@ import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
+
+import com.github.javaparser.StaticJavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
+import com.github.javaparser.ast.visitor.VoidVisitorAdapter;
 
 public class ESJPValidation
 {
@@ -36,7 +36,7 @@ public class ESJPValidation
 
         final String str = Generic4VarArg.readFileToString(_file);
         final Set<String> annotations = new HashSet<>();
-        final CompilationUnit parsed = JavaParser.parse(str);
+        final CompilationUnit parsed = StaticJavaParser.parse(str);
         parsed.accept(new VoidVisitorAdapter<Void>() {
             @Override
             public void visit(final ClassOrInterfaceDeclaration _n, final Void _arg)
