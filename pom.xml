@@ -97,10 +97,6 @@
             <version>${efaps.app.dependencies}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>org.apache.poi</groupId>
-                    <artifactId>poi-ooxml</artifactId>
-                </exclusion>
-                <exclusion>
                     <groupId>org.apache.commons</groupId>
                     <artifactId>commons-vfs2</artifactId>
                 </exclusion>
