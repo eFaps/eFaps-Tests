@@ -43,10 +43,7 @@ public class CICommandDataProvider
     public static Iterator<Object[]> ciCommands(final ITestContext _context)
     {
         final List<Object[]> ret = new ArrayList<>();
-
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CICommand ciCommand : AbstractCIDataProvider.COMMANDS) {
             ret.add(new Object[] { ciCommand });
         }

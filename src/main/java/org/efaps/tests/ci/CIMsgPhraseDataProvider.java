@@ -44,9 +44,7 @@ public class CIMsgPhraseDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            AbstractCIDataProvider.loadCI(_context);
-        }
+        loadCI(_context);
         for (final CIMsgPhrase ciMsgPhrase : AbstractCIDataProvider.MSGPHRASES) {
             ret.add(new Object[] { ciMsgPhrase });
         }

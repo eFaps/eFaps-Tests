@@ -46,9 +46,7 @@ public class CIItemDataProvider
         final List<Object[]> ret = new ArrayList<>();
         final String application = _context.getCurrentXmlTest().getParameter("application");
         if (application != null) {
-            if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-                loadCI(_context);
-            }
+            loadCI(_context);
             for (final ICIItem ciItem : AbstractCIDataProvider.getCIItems()) {
                 ret.add(new Object[] { application, ciItem });
             }

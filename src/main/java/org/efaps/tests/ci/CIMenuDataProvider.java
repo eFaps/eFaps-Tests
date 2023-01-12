@@ -44,9 +44,7 @@ public class CIMenuDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CIMenu ciCommand : AbstractCIDataProvider.MENUS) {
             ret.add(new Object[] { ciCommand });
         }

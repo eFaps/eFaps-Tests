@@ -44,9 +44,7 @@ public class CIStatusDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CIStatusGroup ciStatusGroup : AbstractCIDataProvider.STATUSGRPS) {
             ret.add(new Object[] { ciStatusGroup });
         }

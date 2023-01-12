@@ -44,9 +44,7 @@ public class CIUIImageDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CIUIImage ciNumGen : AbstractCIDataProvider.UIIMG) {
             ret.add(new Object[] { ciNumGen });
         }

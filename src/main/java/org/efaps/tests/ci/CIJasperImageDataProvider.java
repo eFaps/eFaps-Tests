@@ -44,9 +44,7 @@ public class CIJasperImageDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CIJasperImage ciNumGen : AbstractCIDataProvider.JASPERIMG) {
             ret.add(new Object[] { ciNumGen });
         }

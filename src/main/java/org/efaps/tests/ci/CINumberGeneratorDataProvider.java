@@ -44,9 +44,7 @@ public class CINumberGeneratorDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CINumberGenerator ciNumGen : AbstractCIDataProvider.NUMGENS) {
             ret.add(new Object[] { ciNumGen });
         }

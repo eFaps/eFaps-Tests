@@ -44,9 +44,7 @@ public class CITableDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CITable ciTable : AbstractCIDataProvider.TABLES) {
             ret.add(new Object[] { ciTable });
         }
