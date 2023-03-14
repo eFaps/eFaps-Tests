@@ -18,7 +18,7 @@ package org.efaps.tests.others;
 
 import java.io.File;
 import java.net.MalformedURLException;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.UUID;
@@ -55,11 +55,12 @@ public class GeneralTests
         throws InstallationException, MalformedURLException
     {
         final Set<ICIItem> items = AbstractCIDataProvider.getCIItems();
-        final Set<UUID> uuids = new HashSet<>();
+        final var uuids = new HashMap<UUID, ICIItem>();
         for (final ICIItem item : items) {
             final UUID uuid = UUID.fromString(item.getUuid());
-            Assert.assertFalse(uuids.contains(uuid), String.format("Item: '%s' has duplicated UUID: '%s'", item, uuid));
-            uuids.add(uuid);
+            Assert.assertFalse(uuids.containsKey(uuid),
+                String.format("Item: '%s' has duplicated UUID: '%s' with '%s'", item, uuid, uuids.get(uuid)));
+            uuids.put(uuid, item);
         }
 
         final Iterator<Object[]> jasperFilesIter = JasperFileProvider.jasperFiles(_context);
@@ -69,9 +70,9 @@ public class GeneralTests
             final InstallFile installFile = new InstallFile().setURL(file.toURI().toURL());
             final JasperReportImporter importer = new JasperReportImporter(installFile);
             final UUID uuid = importer.getEFapsUUID();
-            Assert.assertFalse(uuids.contains(uuid),
+            Assert.assertFalse(uuids.containsKey(uuid),
                             String.format("Jasper: '%s' has duplicated UUID '%s'", file, uuid));
-            uuids.add(uuid);
+            uuids.put(uuid, null);
         }
 
         final Iterator<Object[]> cssFilesIter = CSSFileProvider.cssFiles(_context);
@@ -81,8 +82,8 @@ public class GeneralTests
             final InstallFile installFile = new InstallFile().setURL(file.toURI().toURL());
             final CSSImporter importer = new CSSImporter(installFile);
             final UUID uuid = importer.getEFapsUUID();
-            Assert.assertFalse(uuids.contains(uuid), String.format("CSS: '%s' has duplicated UUID '%s'", file, uuid));
-            uuids.add(uuid);
+            Assert.assertFalse(uuids.containsKey(uuid), String.format("CSS: '%s' has duplicated UUID '%s'", file, uuid));
+            uuids.put(uuid, null);
         }
     }
 }

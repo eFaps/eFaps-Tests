@@ -44,9 +44,7 @@ public class CIFormDataProvider
     {
         final List<Object[]> ret = new ArrayList<>();
 
-        if (AbstractCIDataProvider.getCIItems().isEmpty()) {
-            loadCI(_context);
-        }
+        loadCI(_context);
         for (final CIForm ciform : AbstractCIDataProvider.FORMS) {
             ret.add(new Object[] { ciform });
         }
