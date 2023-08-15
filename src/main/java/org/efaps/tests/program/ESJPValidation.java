@@ -11,6 +11,7 @@ import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.Test;
 
+import com.github.javaparser.ParserConfiguration.LanguageLevel;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -36,6 +37,7 @@ public class ESJPValidation
 
         final String str = Generic4VarArg.readFileToString(_file);
         final Set<String> annotations = new HashSet<>();
+        StaticJavaParser.getParserConfiguration().setLanguageLevel(LanguageLevel.BLEEDING_EDGE);
         final CompilationUnit parsed = StaticJavaParser.parse(str);
         parsed.accept(new VoidVisitorAdapter<Void>() {
             @Override
