@@ -18,11 +18,11 @@ package org.efaps.tests.others;
 
 import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.testng.ITestContext;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.BeforeTest;
 
 public class Initializer {
 
-  @BeforeSuite
+  @BeforeTest
   public void loadCi(final ITestContext _context) {
     AbstractCIDataProvider.loadCI(_context);
   }
