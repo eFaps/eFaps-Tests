@@ -62,34 +62,6 @@
         <url>http://www.efaps.org</url>
     </organization>
 
-    <!-- Environment Settings -->
-    <issueManagement>
-        <system>eFaps Issues on Google Code</system>
-        <url>http://issues.efaps.org</url>
-    </issueManagement>
-    <scm>
-        <connection>scm:git:git://github.com/eFaps/eFaps-Tests.git</connection>
-        <developerConnection>scm:git:git@github.com:eFaps/eFaps-Tests.git</developerConnection>
-        <url>https://github.com/eFaps/eFaps-Tests/</url>
-        <tag>HEAD</tag>
-    </scm>
-    <distributionManagement>
-        <site>
-            <id>efaps.googlecode.com</id>
-            <name>eFaps-Kernel WebPage</name>
-            <url>scm:svn:https://efaps.googlecode.com/svn/site/eFaps-API</url>
-        </site>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Release Repository</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
     <dependencies>
         <dependency>
             <groupId>org.efaps</groupId>
