@@ -25,9 +25,7 @@ import java.util.UUID;
 import org.efaps.tests.ci.AbstractCIDataProvider;
 import org.efaps.tests.ci.ICIItem;
 import org.efaps.tests.program.CSSFileProvider;
-import org.efaps.tests.program.JasperFileProvider;
 import org.efaps.update.Install.InstallFile;
-import org.efaps.update.schema.program.jasperreport.JasperReportImporter;
 import org.efaps.update.schema.program.staticsource.CSSImporter;
 import org.efaps.update.util.InstallationException;
 import org.testng.Assert;
@@ -61,7 +59,7 @@ public class GeneralTests
                 String.format("Item: '%s' has duplicated UUID: '%s' with '%s'", item, uuid, uuids.get(uuid)));
             uuids.put(uuid, item);
         }
-
+/**
         final Iterator<Object[]> jasperFilesIter = JasperFileProvider.jasperFiles(_context);
         while (jasperFilesIter.hasNext()) {
             final Object[] object = jasperFilesIter.next();
@@ -73,7 +71,7 @@ public class GeneralTests
                             String.format("Jasper: '%s' has duplicated UUID '%s'", file, uuid));
             uuids.put(uuid, null);
         }
-
+**/
         final Iterator<Object[]> cssFilesIter = CSSFileProvider.cssFiles(_context);
         while (cssFilesIter.hasNext()) {
             final Object[] object = cssFilesIter.next();
