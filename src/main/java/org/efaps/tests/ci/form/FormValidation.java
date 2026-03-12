@@ -52,7 +52,7 @@ public class FormValidation
      */
     @Test(dataProvider = "CIForm",  dataProviderClass = CIFormDataProvider.class,
           description = "Field must have one of this Properties 'UIType', 'UIProvider', 'Attribute',"
-                          + "'Select'")
+                          + "'ValueType', 'Select'")
     public void fieldHasDataConfiguration(final CIForm _ciForm)
     {
         for (final CIFormDefinition def : _ciForm.getDefinitions()) {
@@ -63,6 +63,7 @@ public class FormValidation
                         switch (property.getName()) {
                             case "UIType":
                             case "UIProvider":
+                            case "ValueType":
                             case "Attribute":
                             case "Select":
                                 has = true;
